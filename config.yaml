@@ -1,0 +1,6 @@
+--- 
+mgo_host: ds147777.mlab.com:47777
+mgo_database: telosma
+mgo_pword: 123321
+mgo_uname: socialGo
+gin_PORT: 4444

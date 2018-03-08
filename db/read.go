@@ -1,22 +1,40 @@
 package db
 
-import "gopkg.in/mgo.v2/bson"
+import (
+	m "social/mongo"
+	"social/utils"
 
-func (db *DB) GetPost(limit, page int) []*Post {
-	collection := db.db.C(postCollection)
-	var post []*Post
-	query := collection.Find(bson.M{}).Skip(limit * (page - 1)).Limit(limit)
-	err := query.All(&post)
+	"gopkg.in/mgo.v2/bson"
+)
+
+func (db *DB) GetPost(limit, page int, userId string) []*m.Post {
+	utils.Log(userId)
+	collection := db.Db.C(postCollection)
+	var post []*m.Post
+	query := collection.Find(bson.M{"user_id": userId})
+	err := query.Skip(limit * (page - 1)).Limit(limit).All(&post)
 	if err != nil {
 		panic(err)
 	}
 	return post
 }
 
-func (db *DB) GetFeed(limit, page int) []*Feed {
-	collection := db.db.C(feedCollection)
-	var feed []*Feed
-	query := collection.Find(bson.M{}).Skip(limit * (page - 1)).Limit(limit)
+func (db *DB) GetPostById(postID string) *m.Post {
+	utils.Log(postID)
+	collection := db.Db.C(postCollection)
+	var post *m.Post
+	err := collection.FindId(postID).One(&post)
+	if err != nil {
+		panic(err)
+	}
+	return post
+}
+
+func (db *DB) GetFeed(limit, page int, userId string) []*m.Feed {
+	collection := db.Db.C(feedCollection)
+	var feed []*m.Feed
+	query := collection.Find(bson.M{"comsumer_id": userId})
+	query = query.Skip(limit * (page - 1)).Limit(limit)
 	err := query.All(&feed)
 	if err != nil {
 		panic(err)
@@ -24,10 +42,11 @@ func (db *DB) GetFeed(limit, page int) []*Feed {
 	return feed
 }
 
-func (db *DB) GetFollower(limit, page int, own string) []*Follower {
-	collection := db.db.C(followerCollection)
-	var follower []*Follower
-	query := collection.Find(bson.M{"own": own}).Skip(limit * (page - 1)).Limit(limit)
+func (db *DB) GetFollower(limit, page int, own string) []*m.Follower {
+	collection := db.Db.C(followerCollection)
+	var follower []*m.Follower
+	query := collection.Find(bson.M{"own": own})
+	query = query.Skip(limit * (page - 1)).Limit(limit)
 	err := query.All(&follower)
 	if err != nil {
 		panic(err)
@@ -35,9 +54,9 @@ func (db *DB) GetFollower(limit, page int, own string) []*Follower {
 	return follower
 }
 
-func (db *DB) GetFollowing(limit, page int, follower string) []*Follower {
-	collection := db.db.C(followerCollection)
-	var following []*Follower
+func (db *DB) GetFollowing(limit, page int, follower string) []*m.Follower {
+	collection := db.Db.C(followerCollection)
+	var following []*m.Follower
 	query := collection.Find(bson.M{"follower": follower, "state": true})
 	query = query.Skip(limit * (page - 1)).Limit(limit)
 	err := query.All(&following)
@@ -48,7 +67,7 @@ func (db *DB) GetFollowing(limit, page int, follower string) []*Follower {
 }
 
 func (db *DB) CountLike(postID string) int {
-	collection := db.db.C(likeCollection)
+	collection := db.Db.C(likeCollection)
 	count, err := collection.Find(bson.M{"post_id": postID, "state": true}).Count()
 	if err != nil {
 		panic(err)
@@ -56,9 +75,9 @@ func (db *DB) CountLike(postID string) int {
 	return count
 }
 
-func (db *DB) GetAlbum(AlbumID string) *Album {
-	collection := db.db.C(albumCollection)
-	var album *Album
+func (db *DB) GetAlbum(AlbumID string) *m.Album {
+	collection := db.Db.C(albumCollection)
+	var album *m.Album
 	err := collection.FindId(AlbumID).One(&album)
 	if err != nil {
 		panic(err)
