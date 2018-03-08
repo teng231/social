@@ -7,6 +7,26 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+func (db *DB) GetUserByUname(username string) *m.User {
+	collection := db.Db.C(postCollection)
+	user := &m.User{}
+	err := collection.Find(bson.M{"username": username}).One(&user)
+	if err != nil {
+		panic(err)
+	}
+	return user
+}
+
+func (db *DB) GetUserByEmail(email string) *m.User {
+	collection := db.Db.C(postCollection)
+	user := &m.User{}
+	err := collection.Find(bson.M{"email": email}).One(&user)
+	if err != nil {
+		panic(err)
+	}
+	return user
+}
+
 func (db *DB) GetPost(limit, page int, userId string) []*m.Post {
 	utils.Log(userId)
 	collection := db.Db.C(postCollection)

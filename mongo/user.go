@@ -18,6 +18,13 @@ type User struct {
 	State     string        `json:"state" bson:"state"`
 }
 
+func (p *User) SetPassword(newPas string) {
+	if newPas == "" {
+		return
+	}
+	p.Password = newPas
+}
+
 func (p *User) GetID() string {
 	if !p.ID.Valid() {
 		return ""
@@ -30,6 +37,13 @@ func (p *User) GetAlbumName() string {
 		return ""
 	}
 	return p.AlbumName
+}
+
+func (p *User) GetPassword() string {
+	if p.Password == "" {
+		return ""
+	}
+	return p.Password
 }
 
 func (p *User) GetUserName() string {

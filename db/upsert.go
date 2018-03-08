@@ -15,6 +15,15 @@ func (db *DB) CreatePost(p *m.Post) *m.Post {
 	}
 	return p
 }
+func (db *DB) CreateUser(u *m.User) (error, *m.User) {
+	collection := db.Db.C(userCollection)
+	u.ID = bson.NewObjectId()
+	err := collection.Insert(&u)
+	if err != nil {
+		panic(err)
+	}
+	return nil, u
+}
 
 func (db *DB) CreateComment(c *m.Comment) *m.Comment {
 	collection := db.Db.C(commentCollection)
