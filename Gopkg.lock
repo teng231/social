@@ -41,7 +41,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix"]
-  revision = "dd2ff4accc098aceecb86b36eaa7829b2a17b1c9"
+  revision = "349b81fb5c64ec1734eb6ee148df25459ea48517"
 
 [[projects]]
   name = "gopkg.in/go-playground/validator.v8"

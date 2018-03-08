@@ -2,17 +2,26 @@ package api
 
 import (
 	"fmt"
+	"social/core"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
-type GinConFig struct {
+const (
+	DEFAULT_LIMIT = 20
+	DEFAULT_PAGE  = 1
+)
+
+type GinConfig struct {
 	router *gin.Engine
 	PORT   int
 	mode   string
+	cr     *core.Core
 }
 
-func (g *GinConFig) Config(port int, mode string) {
+// Config is a constructer
+func (g *GinConfig) Config(port int, mode string, cr *core.Core) {
 	if mode == "" {
 		mode = gin.ReleaseMode
 	}
@@ -21,23 +30,36 @@ func (g *GinConFig) Config(port int, mode string) {
 	g.router.Use(gin.Recovery())
 	g.router.Use(gin.Logger())
 	g.PORT = port
+	g.cr = cr
 }
 
-func (g *GinConFig) Run() {
-	g.GinStart()
+// Run start api
+func (g *GinConfig) Run() {
+	g.ginStart()
 	g.router.Run(fmt.Sprintf(":%d", g.PORT))
 }
 
-func (g *GinConFig) Ping(ctx *gin.Context) {
+func (g *GinConfig) ping(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
 		"pong": "ok",
 	})
 }
-func (g *GinConFig) GinStarted(ctx *gin.Context) {
+
+func (g *GinConfig) ginStarted(ctx *gin.Context) {
 	ctx.String(200, "Gin started")
 }
 
-func (g *GinConFig) GinStart() {
-	g.router.GET("ping", g.Ping)
-	g.router.GET("", g.GinStarted)
+func (g *GinConfig) getLimitPage(strLimit, strPage string) (int, int) {
+	limit, err1 := strconv.Atoi(strLimit)
+	page, err2 := strconv.Atoi(strPage)
+
+	if err1 != nil {
+		limit = DEFAULT_LIMIT
+	}
+
+	if err2 != nil {
+		page = DEFAULT_PAGE
+	}
+
+	return limit, page
 }

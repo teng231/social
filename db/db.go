@@ -16,8 +16,8 @@ type DB struct {
 const (
 	postCollection     = "social_post"
 	userCollection     = "social_user"
-	albumCollection    = "social_album"
-	commentCollection  = "social_collection"
+	albumCollection    = "social_albums"
+	commentCollection  = "social_comments"
 	followerCollection = "social_follower"
 	likeCollection     = "social_like"
 	tokenCollection    = "AccessToken"

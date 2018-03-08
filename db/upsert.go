@@ -6,46 +6,37 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-func (db *DB) CreatePost(p *m.Post) *m.Post {
+func (db *DB) CreatePost(p *m.Post) (error, *m.Post) {
 	collection := db.Db.C(postCollection)
 	p.ID = bson.NewObjectId()
 	err := collection.Insert(&p)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return p
-}
-func (db *DB) CreateUser(u *m.User) (error, *m.User) {
-	collection := db.Db.C(userCollection)
-	u.ID = bson.NewObjectId()
-	err := collection.Insert(&u)
-	if err != nil {
-		panic(err)
-	}
-	return nil, u
+	return nil, p
 }
 
-func (db *DB) CreateComment(c *m.Comment) *m.Comment {
+func (db *DB) CreateComment(c *m.Comment) (error, *m.Comment) {
 	collection := db.Db.C(commentCollection)
 	c.ID = bson.NewObjectId()
 	err := collection.Insert(&c)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return c
+	return nil, c
 }
 
-func (db *DB) CreateFeed(f *m.Feed) *m.Feed {
+func (db *DB) CreateFeed(f *m.Feed) (error, *m.Feed) {
 	collection := db.Db.C(feedCollection)
 	f.ID = bson.NewObjectId()
 	err := collection.Insert(&f)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return f
+	return nil, f
 }
 
-func (db *DB) CreateFeeds(feeds []*m.Feed) []interface{} {
+func (db *DB) CreateFeeds(feeds []*m.Feed) (error, []interface{}) {
 	bulk := db.Db.C(feedCollection).Bulk()
 	feedDone := make([]interface{}, 0)
 	for _, feed := range feeds {
@@ -55,29 +46,29 @@ func (db *DB) CreateFeeds(feeds []*m.Feed) []interface{} {
 	bulk.Insert(feedDone...)
 	_, bulkErr := bulk.Run()
 	if bulkErr != nil {
-		panic(bulkErr)
+		return bulkErr, nil
 	}
-	return feedDone
+	return nil, feedDone
 }
 
-func (db *DB) CreateUser(u *m.User) *m.User {
+func (db *DB) CreateUser(u *m.User) (error, *m.User) {
 	collection := db.Db.C(userCollection)
 	u.ID = bson.NewObjectId()
 	err := collection.Insert(&u)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return u
+	return nil, u
 }
 
-func (db *DB) CreateToken(t *m.AccessToken) *m.AccessToken {
+func (db *DB) CreateToken(t *m.AccessToken) (error, *m.AccessToken) {
 	collection := db.Db.C(tokenCollection)
 	t.ID = bson.NewObjectId()
 	err := collection.Insert(&t)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return t
+	return nil, t
 }
 
 // func (db *DB) ModifyLike(t *Like, postID, userID string) *Like {
@@ -91,22 +82,22 @@ func (db *DB) CreateToken(t *m.AccessToken) *m.AccessToken {
 // 	return t
 // }
 
-func (db *DB) ModifyFollower(t *m.Follower) *m.Follower {
+func (db *DB) ModifyFollower(t *m.Follower) (error, *m.Follower) {
 	collection := db.Db.C(tokenCollection)
 	t.ID = bson.NewObjectId()
 	err := collection.Insert(&t)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return t
+	return nil, t
 }
 
-func (db *DB) CreateAlbum(a *m.Album) *m.Album {
+func (db *DB) CreateAlbum(a *m.Album) (error, *m.Album) {
 	collection := db.Db.C(albumCollection)
 	a.ID = bson.NewObjectId()
 	err := collection.Insert(&a)
 	if err != nil {
-		panic(err)
+		return err, nil
 	}
-	return a
+	return nil, a
 }

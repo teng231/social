@@ -38,11 +38,12 @@ func main() {
 	// close when fn main down
 	defer mongo.Close()
 
+	// create Core
 	core := &core.Core{}
 	core.Config(mongo)
-	core.GetPostByUser(10, 1, "5a106155cb8eae85d819a78d")
-	// core.GetFeedByUser(10, 1, "5a106166cb8eae85d819a78e")
-	RESTful := &api.GinConFig{}
-	RESTful.Config(c.PORT, "")
+
+	// create RESTful
+	RESTful := &api.GinConfig{}
+	RESTful.Config(c.PORT, "", core)
 	RESTful.Run()
 }
