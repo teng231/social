@@ -1,7 +1,7 @@
 package core
 
 import (
-	m "social/mongo"
+	m "github.com/my0sot1s/social/mongo"
 )
 
 type CInsert interface {

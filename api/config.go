@@ -2,7 +2,7 @@ package api
 
 import (
 	"fmt"
-	"social/core"
+	"github.com/my0sot1s/social/core"
 	"strconv"
 
 	"github.com/gin-gonic/gin"

@@ -2,8 +2,10 @@ package db
 
 import (
 	"fmt"
-	m "social/mongo"
-	"social/utils"
+
+	"github.com/my0sot1s/social/utils"
+
+	m "github.com/my0sot1s/social/mongo"
 
 	"gopkg.in/mgo.v2/bson"
 )

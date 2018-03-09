@@ -1,8 +1,9 @@
 package db
 
 import (
-	"social/utils"
 	"time"
+
+	"github.com/my0sot1s/social/utils"
 
 	mgo "gopkg.in/mgo.v2"
 )

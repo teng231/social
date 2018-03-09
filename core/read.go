@@ -1,9 +1,9 @@
 package core
 
 import (
-	_db "social/db"
-	m "social/mongo"
-	"social/utils"
+	_db "github.com/my0sot1s/social/db"
+	m "github.com/my0sot1s/social/mongo"
+	"github.com/my0sot1s/social/utils"
 )
 
 /*

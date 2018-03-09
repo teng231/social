@@ -2,9 +2,10 @@ package main
 
 import (
 	"io/ioutil"
-	"social/api"
-	"social/core"
-	"social/db"
+
+	"github.com/my0sot1s/social/api"
+	"github.com/my0sot1s/social/core"
+	"github.com/my0sot1s/social/db"
 
 	"gopkg.in/yaml.v2"
 )

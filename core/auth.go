@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
-	m "social/mongo"
+	m "github.com/my0sot1s/social/mongo"
 
 	"golang.org/x/crypto/bcrypt"
 )
