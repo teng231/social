@@ -18,7 +18,7 @@ func (p *Follower) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *Follower) GetOwn() string {

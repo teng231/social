@@ -2,8 +2,9 @@ package api
 
 import (
 	"fmt"
-	"github.com/my0sot1s/social/core"
 	"strconv"
+
+	"github.com/my0sot1s/social/core"
 
 	"github.com/gin-gonic/gin"
 )
@@ -25,6 +26,7 @@ func (g *GinConfig) Config(port int, mode string, cr *core.Core) {
 	if mode == "" {
 		mode = gin.ReleaseMode
 	}
+	// set mode `production` or `dev`
 	gin.SetMode(mode)
 	g.router = gin.New()
 	g.router.Use(gin.Recovery())

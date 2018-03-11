@@ -18,7 +18,7 @@ func (p *AccessToken) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *AccessToken) GetToken() string {

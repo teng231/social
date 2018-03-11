@@ -21,7 +21,7 @@ func (p *Post) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *Post) GetUserID() string {

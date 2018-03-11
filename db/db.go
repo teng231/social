@@ -22,7 +22,7 @@ const (
 	followerCollection = "social_follower"
 	likeCollection     = "social_like"
 	tokenCollection    = "AccessToken"
-	feedCollection     = "social_timeline"
+	feedCollection     = "social_feed"
 )
 
 func (connect *DB) Config(Host, Database, Username, Password string) {
@@ -36,15 +36,13 @@ func (connect *DB) Config(Host, Database, Username, Password string) {
 
 	mongoSession, err := mgo.DialWithInfo(mongoDialInfo)
 	if err != nil {
-		panic(err)
+		utils.ErrLog(err)
+		return
 	}
 	connect.Session = mongoSession
 	mongoSession.SetMode(mgo.Monotonic, true)
-	if err = mongoSession.DB(Database).Login(Username, Password); err != nil {
-		panic(err)
-	}
 	connect.Db = mongoSession.DB(Database)
-	utils.Log("** Config success")
+	utils.Log("ಠ‿ಠ mongodb connected ಠ‿ಠ")
 }
 
 func (connect *DB) Close() {

@@ -19,7 +19,7 @@ func (p *Album) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *Album) GetAlbumName() string {

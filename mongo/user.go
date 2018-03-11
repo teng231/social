@@ -18,18 +18,15 @@ type User struct {
 	State     string        `json:"state" bson:"state"`
 }
 
-func (p *User) SetPassword(newPas string) {
-	if newPas == "" {
-		return
-	}
-	p.Password = newPas
+func (p *User) SetPassword(newPw string) {
+	p.Password = newPw
 }
 
 func (p *User) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *User) GetAlbumName() string {

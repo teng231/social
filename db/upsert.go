@@ -1,6 +1,9 @@
 package db
 
 import (
+	"fmt"
+	"time"
+
 	m "github.com/my0sot1s/social/mongo"
 
 	"gopkg.in/mgo.v2/bson"
@@ -54,33 +57,13 @@ func (db *DB) CreateFeeds(feeds []*m.Feed) (error, []interface{}) {
 func (db *DB) CreateUser(u *m.User) (error, *m.User) {
 	collection := db.Db.C(userCollection)
 	u.ID = bson.NewObjectId()
+	u.AlbumName = fmt.Sprintf("@%s_%s", u.GetUserName(), u.GetID())
 	err := collection.Insert(&u)
 	if err != nil {
 		return err, nil
 	}
 	return nil, u
 }
-
-func (db *DB) CreateToken(t *m.AccessToken) (error, *m.AccessToken) {
-	collection := db.Db.C(tokenCollection)
-	t.ID = bson.NewObjectId()
-	err := collection.Insert(&t)
-	if err != nil {
-		return err, nil
-	}
-	return nil, t
-}
-
-// func (db *DB) ModifyLike(t *Like, postID, userID string) *Like {
-// 	collection := db.db.C(tokenCollection)
-// 	t.ID = bson.NewObjectId()
-// 	updator := bson.M{"$set", t}
-// 	err := collection.Upsert(bson.M{"post_id": postID, "user_id": userID}, updator)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	return t
-// }
 
 func (db *DB) ModifyFollower(t *m.Follower) (error, *m.Follower) {
 	collection := db.Db.C(tokenCollection)
@@ -100,4 +83,47 @@ func (db *DB) CreateAlbum(a *m.Album) (error, *m.Album) {
 		return err, nil
 	}
 	return nil, a
+}
+
+func (db *DB) HitLikePost(postID, userID string) error {
+	collection := db.Db.C(likeCollection)
+	sellector := bson.M{"post_id": postID, "user_id": userID}
+	update := bson.M{
+		"created": time.Now(),
+		"post_id": postID,
+		"user_id": userID,
+	}
+	_, err := collection.Upsert(sellector, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *DB) UnlikePost(postID, userID string) error {
+	collection := db.Db.C(likeCollection)
+	sellector := bson.M{"post_id": postID, "user_id": userID}
+	err := collection.Remove(sellector)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *DB) GetUsersLikePost(userIDs []string) (error, []*m.User) {
+	collection := db.Db.C(userCollection)
+	var users []*m.User
+	listQueriesID := make([]bson.M, 0)
+	for _, p := range userIDs {
+		if p == "" {
+			continue
+		}
+		bsonID := bson.M{"_id": bson.ObjectIdHex(p)}
+		listQueriesID = append(listQueriesID, bsonID)
+	}
+	err := collection.Find(bson.M{"$or": listQueriesID}).All(&users)
+	if err != nil {
+		return err, nil
+	}
+	return nil, users
 }

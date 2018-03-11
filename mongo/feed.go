@@ -8,7 +8,7 @@ import (
 
 type Feed struct {
 	ID         bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	ConsumerID string        `json:"consumer_id bson:"consumer_id"`
+	ConsumerID string        `json:"comsumer_id" bson:"comsumer_id"`
 	PostID     string        `json:"post_id" bson:"post_id"`
 	Created    time.Time     `json:"created" bson:"created"`
 }
@@ -17,7 +17,7 @@ func (p *Feed) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *Feed) GetConsumerID() string {

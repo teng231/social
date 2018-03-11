@@ -1,8 +1,6 @@
 package db
 
 import (
-	"fmt"
-
 	"github.com/my0sot1s/social/utils"
 
 	m "github.com/my0sot1s/social/mongo"
@@ -11,7 +9,7 @@ import (
 )
 
 func (db *DB) GetUserByUname(username string) (error, *m.User) {
-	collection := db.Db.C(postCollection)
+	collection := db.Db.C(userCollection)
 	user := &m.User{}
 	err := collection.Find(bson.M{"username": username}).One(&user)
 	if err != nil {
@@ -21,7 +19,7 @@ func (db *DB) GetUserByUname(username string) (error, *m.User) {
 }
 
 func (db *DB) GetUserByEmail(email string) (error, *m.User) {
-	collection := db.Db.C(postCollection)
+	collection := db.Db.C(userCollection)
 	user := &m.User{}
 	err := collection.Find(bson.M{"email": email}).One(&user)
 	if err != nil {
@@ -31,7 +29,6 @@ func (db *DB) GetUserByEmail(email string) (error, *m.User) {
 }
 
 func (db *DB) GetPost(limit, page int, userId string) (error, []*m.Post) {
-	utils.Log(userId)
 	collection := db.Db.C(postCollection)
 	var post []*m.Post
 	query := collection.Find(bson.M{"user_id": userId})
@@ -91,7 +88,7 @@ func (db *DB) GetFollowing(limit, page int, follower string) (error, []*m.Follow
 
 func (db *DB) CountLike(postID string) (error, int) {
 	collection := db.Db.C(likeCollection)
-	count, err := collection.Find(bson.M{"post_id": postID, "state": true}).Count()
+	count, err := collection.Find(bson.M{"post_id": postID}).Count()
 	if err != nil {
 		return err, 0
 	}
@@ -115,6 +112,51 @@ func (db *DB) GetComments(limit, page int, postID string) (error, []*m.Comment) 
 	if err != nil {
 		return err, nil
 	}
-	fmt.Printf("%v", len(comments))
 	return nil, comments
+}
+
+func (db *DB) GetLikes(postID string) (error, []*m.Like) {
+	collection := db.Db.C(likeCollection)
+	var likes []*m.Like
+	err := collection.Find(bson.M{"post_id": postID}).All(&likes)
+	if err != nil {
+		return err, nil
+	}
+	return nil, likes
+}
+
+func (db *DB) GetPosts(pIDs []string) (error, []*m.Post) {
+	collection := db.Db.C(postCollection)
+	var posts []*m.Post
+	listQueriesID := make([]bson.M, 0)
+	for _, p := range pIDs {
+		if p == "" {
+			continue
+		}
+		bsonID := bson.M{"_id": bson.ObjectIdHex(p)}
+		listQueriesID = append(listQueriesID, bsonID)
+	}
+	err := collection.Find(bson.M{"$or": listQueriesID}).All(&posts)
+	if err != nil {
+		return err, nil
+	}
+	return nil, posts
+}
+
+func (db *DB) GetUserOwns(uIDs []string) (error, []*m.User) {
+	collection := db.Db.C(userCollection)
+	var users []*m.User
+	listQueriesID := make([]bson.M, 0)
+	for _, p := range uIDs {
+		if p == "" {
+			continue
+		}
+		bsonID := bson.M{"_id": bson.ObjectIdHex(p)}
+		listQueriesID = append(listQueriesID, bsonID)
+	}
+	err := collection.Find(bson.M{"$or": listQueriesID}).All(&users)
+	if err != nil {
+		return err, nil
+	}
+	return nil, users
 }

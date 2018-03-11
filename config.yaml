@@ -1,6 +1,9 @@
 --- 
-mgo_host: ds147777.mlab.com:47777
-mgo_database: telosma
-mgo_pword: 123321
-mgo_uname: socialGo
+mgo_Host: ds147777.mlab.com:47777
+mgo_Database: telosma
+mgo_Password: 123321
+mgo_Username: socialGo
 gin_PORT: 4444
+redis_Host: redis-16703.c10.us-east-1-2.ec2.cloud.redislabs.com:16703
+redis_Password: 95manhte
+redis_Db: redis-node

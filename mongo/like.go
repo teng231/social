@@ -18,7 +18,7 @@ func (p *Like) GetID() string {
 	if !p.ID.Valid() {
 		return ""
 	}
-	return p.ID.String()
+	return p.ID.Hex()
 }
 
 func (p *Like) GetPostID() string {

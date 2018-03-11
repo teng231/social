@@ -1,0 +1,1 @@
+openssl genrsa -out id_rsa 1024 && openssl rsa -in id_rsa -pubout >id_rsa.pub
