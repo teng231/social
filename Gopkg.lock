@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/gin-contrib/sse"
   packages = ["."]
@@ -14,10 +20,22 @@
   version = "v1.2"
 
 [[projects]]
+  name = "github.com/go-redis/redis"
+  packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto","internal/singleflight","internal/util"]
+  revision = "9133634a132e00309476e2d9acbf0c8058d4c888"
+  version = "v6.10.0"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "925541529c1fa6821df4e44ce2723319eb2be768"
   version = "v1.0.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/heroku/x"
+  packages = ["hmetrics","hmetrics/onload"]
+  revision = "55e46844d4d75151d19a885ad01d55017df2c71e"
 
 [[projects]]
   name = "github.com/mattn/go-isatty"
@@ -64,6 +82,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8b95900e97a09e3ed023996d86a02e67b9b92a139f56cb7094aefe2f4fe45aee"
+  inputs-digest = "f6334ccaeb7ae156c930ca21ed9c8f0675abbe8abd6812ea63959f80dc480295"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -16,13 +16,13 @@ const (
 
 type GinConfig struct {
 	router *gin.Engine
-	PORT   int
+	PORT   string
 	mode   string
 	cr     *core.Core
 }
 
 // Config is a constructer
-func (g *GinConfig) Config(port int, mode string, cr *core.Core) {
+func (g *GinConfig) Config(port, mode string, cr *core.Core) {
 	if mode == "" {
 		mode = gin.ReleaseMode
 	}
@@ -38,7 +38,7 @@ func (g *GinConfig) Config(port int, mode string, cr *core.Core) {
 // Run start api
 func (g *GinConfig) Run() {
 	g.ginStart()
-	g.router.Run(fmt.Sprintf(":%d", g.PORT))
+	g.router.Run(fmt.Sprintf(":%v", g.PORT))
 }
 
 func (g *GinConfig) ping(ctx *gin.Context) {

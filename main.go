@@ -2,6 +2,7 @@ package main
 
 import (
 	"io/ioutil"
+	"os"
 	"sync"
 
 	"github.com/my0sot1s/social/api"
@@ -10,6 +11,7 @@ import (
 	"github.com/my0sot1s/social/redis"
 	"github.com/my0sot1s/social/utils"
 
+	_ "github.com/heroku/x/hmetrics/onload"
 	"gopkg.in/yaml.v2"
 )
 
@@ -18,7 +20,7 @@ type Config struct {
 	DbName    string `yaml:"mgo_Database" required:"true"`
 	Username  string `yaml:"mgo_Username" required:"true"`
 	Password  string `yaml:"mgo_Password" required:"true"`
-	PORT      int    `yaml:"gin_PORT" required:"true"`
+	PORT      string `yaml:"gin_PORT" required:"true"`
 	RedisHost string `yaml:"redis_Host" required:"true"`
 	RedisDB   string `yaml:"redis_Db" required:"true"`
 	RedisPass string `yaml:"redis_Password" required:"true"`
@@ -77,7 +79,11 @@ func main() {
 	core := &core.Core{}
 	core.Config(mg, rdCli, "keys/id_rsa", "keys/id_rsa.pub")
 	// create RESTful
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = c.PORT
+	}
 	RESTful := &api.GinConfig{}
-	RESTful.Config(c.PORT, "", core)
+	RESTful.Config(port, "", core)
 	RESTful.Run()
 }
