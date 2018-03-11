@@ -66,7 +66,7 @@ func (db *DB) CreateUser(u *m.User) (error, *m.User) {
 }
 
 func (db *DB) ModifyFollower(t *m.Follower) (error, *m.Follower) {
-	collection := db.Db.C(tokenCollection)
+	collection := db.Db.C(followerCollection)
 	t.ID = bson.NewObjectId()
 	err := collection.Insert(&t)
 	if err != nil {

@@ -196,3 +196,30 @@ func (g *GinConfig) getUserLikeAPost(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{"users": users})
 }
+
+func (g *GinConfig) checkOwnerLikePost(ctx *gin.Context) {
+	pid := ctx.Param("id")
+	uid := ctx.PostForm("uid")
+	if pid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no post id",
+		})
+	}
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+	}
+	err, ok := g.cr.OwnerLikePost(pid, uid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"uid":    uid,
+		"pid":    pid,
+		"status": ok,
+	})
+}

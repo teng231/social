@@ -21,7 +21,6 @@ const (
 	commentCollection  = "social_comments"
 	followerCollection = "social_follower"
 	likeCollection     = "social_like"
-	tokenCollection    = "AccessToken"
 	feedCollection     = "social_feed"
 )
 

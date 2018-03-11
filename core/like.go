@@ -53,3 +53,13 @@ func (p *Core) GetUserLikePost(postId string) (error, []*m.User) {
 	}
 	return nil, users
 }
+
+func (p *Core) OwnerLikePost(postId, uid string) (error, bool) {
+	// get like
+	err, b := p.Db.IsUserLikePost(postId, uid)
+	if err != nil && b {
+		utils.ErrLog(err)
+		return err, true
+	}
+	return err, b
+}

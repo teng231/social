@@ -124,6 +124,18 @@ func (db *DB) GetLikes(postID string) (error, []*m.Like) {
 	}
 	return nil, likes
 }
+func (db *DB) IsUserLikePost(pid, uid string) (error, bool) {
+	collection := db.Db.C(likeCollection)
+	count, err := collection.Find(bson.M{"post_id": pid, "user_id": uid}).Count()
+	if err != nil {
+		return err, true
+	}
+	isExist := false
+	if count > 0 {
+		isExist = true
+	}
+	return nil, isExist
+}
 
 func (db *DB) GetPosts(pIDs []string) (error, []*m.Post) {
 	collection := db.Db.C(postCollection)

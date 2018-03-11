@@ -10,6 +10,7 @@ func (g *GinConfig) ginStart() {
 	like.POST("/:pid/like", g.hitLikeAPost)
 	like.POST("/:pid/unlike", g.unlikeAPost)
 	like.GET("users/:pid", g.getUserLikeAPost)
+	// like.PUT("/:id/byUser", g.checkOwnerLikePost)
 
 	// feed
 	feed := g.router.Group("/feed")
