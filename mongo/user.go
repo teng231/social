@@ -8,13 +8,13 @@ import (
 
 type User struct {
 	ID        bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	Password  string        `json:"password" bson:"password"`
+	Password  string        `json:"password" bson:"password,omitempty"`
 	AlbumName string        `json:"album_name" bson:"album_name`
 	UserName  string        `json:"username" bson:"username"`
 	Email     string        `json:"email" bson:"email"`
 	Created   time.Time     `json:"created" bson:"created"`
-	Avatar    string        `json:"avatar" bson:"avatar"`
-	Banner    string        `json:"banner" bson:"banner"`
+	Avatar    string        `json:"avatar" bson:"avatar,omitempty"`
+	Banner    string        `json:"banner" bson:"banner,omitempty"`
 	State     string        `json:"state" bson:"state"`
 }
 

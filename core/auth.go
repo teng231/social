@@ -134,6 +134,7 @@ func (c *Core) Login(username, password string) (error, *m.User, string) {
 
 func (c *Core) Register(user *m.User) (error, *m.User, string) {
 	username := user.GetUserName()
+
 	if username == "" || user.GetEmail() == "" || user.GetPassword() == "" {
 		utils.ErrLog(errors.New("No username or email or password"))
 		return errors.New("No username or email or password"), nil, ""
@@ -144,15 +145,18 @@ func (c *Core) Register(user *m.User) (error, *m.User, string) {
 		utils.ErrLog(errors.New("username is exist"))
 		return errors.New("username is exist"), nil, ""
 	}
+
 	utils.Log(user.GetEmail())
 	err, email := c.Db.GetUserByEmail(user.GetEmail())
 
 	if email != nil {
+
 		utils.ErrLog(errors.New("email is exist"))
 		return errors.New("email is exist"), nil, ""
 	}
 
 	if len(user.GetPassword()) < 6 {
+
 		utils.ErrLog(errors.New("password short"))
 		return errors.New("password short"), nil, ""
 	}
@@ -160,6 +164,7 @@ func (c *Core) Register(user *m.User) (error, *m.User, string) {
 	user.Created = time.Now()
 	user.State = "actived"
 	e, newUser := c.Db.CreateUser(user)
+
 	if e != nil {
 		utils.ErrLog(e)
 		return err, nil, ""
@@ -169,11 +174,11 @@ func (c *Core) Register(user *m.User) (error, *m.User, string) {
 	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset)
 	utils.Log(user.GetID())
 	return e, newUser, tokenString
-
 }
 
 func (c *Core) CheckTokenExpired(tokenString string) string {
 	uid, err := c.rd.GetValue(tokenString)
+
 	if err != nil {
 		utils.ErrLog(err)
 		return ""

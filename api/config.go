@@ -33,6 +33,7 @@ func (g *GinConfig) Config(port, mode string, cr *core.Core) {
 	g.router.Use(gin.Logger())
 	g.PORT = port
 	g.cr = cr
+	g.router.StaticFile("/favicon.ico", "./../favicon.ico")
 }
 
 // Run start api
