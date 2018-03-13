@@ -4,6 +4,13 @@ func (g *GinConfig) ginStart() {
 	// ping pong
 	g.router.GET("ping", g.ping)
 	g.router.GET("", g.ginStarted)
+	// follow
+	follow := g.router.Group("/follow")
+	follow.GET("/:uid/follower", g.getListFollower)
+	follow.GET("/:uid/following", g.getListFollowing)
+	follow.POST("do/:uid/follow", g.followAnUser)
+	follow.POST("do/:uid/unfollow", g.unFollowAnUser)
+
 	// like
 	like := g.router.Group("/like")
 	like.GET("pid/:pid", g.countLikeAPost)

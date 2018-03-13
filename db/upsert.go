@@ -127,3 +127,22 @@ func (db *DB) GetUsersLikePost(userIDs []string) (error, []*m.User) {
 	}
 	return nil, users
 }
+
+// `owner` follow `uid`
+func (db *DB) FollowUser(f *m.Follower) error {
+	collection := db.Db.C(followerCollection)
+	err := collection.Insert(f)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *DB) UnfollowUser(own, uid string) error {
+	collection := db.Db.C(followerCollection)
+	err := collection.Remove(bson.M{"own": uid, "follower": own})
+	if err != nil {
+		return err
+	}
+	return nil
+}

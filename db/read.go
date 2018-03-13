@@ -62,24 +62,20 @@ func (db *DB) GetFeed(limit, page int, userId string) (error, []*m.Feed) {
 	return nil, feeds
 }
 
-func (db *DB) GetFollower(limit, page int, own string) (error, []*m.Follower) {
+func (db *DB) GetFollower(own string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)
 	var follower []*m.Follower
-	query := collection.Find(bson.M{"own": own})
-	query = query.Skip(limit * (page - 1)).Limit(limit)
-	err := query.All(&follower)
+	err := collection.Find(bson.M{"own": own}).All(&follower)
 	if err != nil {
 		return err, nil
 	}
 	return nil, follower
 }
 
-func (db *DB) GetFollowing(limit, page int, follower string) (error, []*m.Follower) {
+func (db *DB) GetFollowing(follower string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)
 	var following []*m.Follower
-	query := collection.Find(bson.M{"follower": follower, "state": true})
-	query = query.Skip(limit * (page - 1)).Limit(limit)
-	err := query.All(&following)
+	err := collection.Find(bson.M{"follower": follower}).All(&following)
 	if err != nil {
 		return err, nil
 	}

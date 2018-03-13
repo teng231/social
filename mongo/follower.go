@@ -9,7 +9,7 @@ import (
 type Follower struct {
 	ID       bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Own      string        `json:"own" bson:"own"`
-	Follower string        `json:"follower bson:"follower"`
+	Follower string        `json:"follower" bson:"follower"`
 	Created  time.Time     `json:"created" bson:"created"`
 	State    bool          `json:"state" bson:"state"`
 }

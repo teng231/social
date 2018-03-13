@@ -223,3 +223,93 @@ func (g *GinConfig) checkOwnerLikePost(ctx *gin.Context) {
 		"status": ok,
 	})
 }
+
+func (g *GinConfig) getListFollowing(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+	}
+	err, users := g.cr.GetFollowingByUid(uid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"uid":   uid,
+		"users": users,
+	})
+}
+
+func (g *GinConfig) getListFollower(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+	}
+	err, users := g.cr.GetFollowerByOwner(uid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"uid":   uid,
+		"users": users,
+	})
+}
+
+func (g *GinConfig) followAnUser(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	owner := ctx.PostForm("owner")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+	}
+	if owner == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no owner",
+		})
+	}
+	err := g.cr.FollowAnUser(uid, owner)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"ok": true,
+	})
+}
+
+func (g *GinConfig) unFollowAnUser(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	owner := ctx.PostForm("owner")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+	}
+	if owner == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no owner",
+		})
+	}
+	err := g.cr.UnfollowAnUser(uid, owner)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"ok": true,
+	})
+}
