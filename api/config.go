@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/my0sot1s/social/core"
@@ -33,6 +34,7 @@ func (g *GinConfig) Config(port, mode string, cr *core.Core) {
 	g.router.Use(gin.Logger())
 	g.PORT = port
 	g.cr = cr
+	g.router.Use(g.middlewareHeader())
 	g.router.StaticFile("/favicon.ico", "./../favicon.ico")
 }
 
@@ -44,7 +46,7 @@ func (g *GinConfig) Run() {
 
 func (g *GinConfig) ping(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{
-		"pong": "ok",
+		"pong": "sure ok",
 	})
 }
 
@@ -65,4 +67,46 @@ func (g *GinConfig) getLimitPage(strLimit, strPage string) (int, int) {
 	}
 
 	return limit, page
+}
+
+func (g *GinConfig) sendFavicon(ctx *gin.Context) {
+	ctx.File("../statics/favicon.ico")
+}
+
+func (g *GinConfig) middlewareHeader() gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		c.Writer.Header().Set("Content-Type", "application/json")
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+		if c.Request.Method == "OPTIONS" {
+			fmt.Println("options")
+			c.AbortWithStatus(200)
+			return
+		}
+		c.Next()
+	}
+}
+
+func respondWithError(code int, message string, c *gin.Context) {
+	resp := map[string]string{"error": message}
+
+	c.JSON(code, resp)
+	c.AbortWithStatus(code)
+}
+func (g *GinConfig) middlewareTokenAuth() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		token := c.Request.FormValue("token")
+
+		if token == "" {
+			respondWithError(401, "API token required", c)
+			return
+		}
+
+		if token != os.Getenv("API_TOKEN") {
+			respondWithError(401, "Invalid API token", c)
+			return
+		}
+		c.Next()
+	}
 }

@@ -4,6 +4,7 @@ func (g *GinConfig) ginStart() {
 	// ping pong
 	g.router.GET("ping", g.ping)
 	g.router.GET("", g.ginStarted)
+	// g.router.GET("/favicon.ico", g.sendFavicon)
 	// follow
 	follow := g.router.Group("/follow")
 	follow.GET("/:uid/follower", g.getListFollower)
