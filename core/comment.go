@@ -8,7 +8,7 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) GetCommentByPostID(limit, page int, postId string) (error, []*m.Comment) {
+func (p *Core) LoadCommentByPostID(limit, page int, postId string) (error, []*m.Comment) {
 	err, comments := p.Db.GetComments(limit, page, postId)
 	if err != nil {
 		return err, nil
@@ -17,7 +17,7 @@ func (p *Core) GetCommentByPostID(limit, page int, postId string) (error, []*m.C
 }
 
 // InsertPost add post to db
-func (c *Core) InsertCommentsToPost(pid, text, userID string) (error, *m.Comment) {
+func (c *Core) UpsertCommentsToPost(pid, text, userID string) (error, *m.Comment) {
 	if pid == "" || userID == "" {
 		utils.ErrLog(errors.New("err no field pid or userID"))
 		return errors.New("err no field pid or userID"), nil

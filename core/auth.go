@@ -14,11 +14,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type IAuth interface {
-	GetUserByUname(username string) *m.User
-	CreateUser(u *m.User) (error, *m.User)
-}
-
 type JWTAuthentication struct {
 	privateKey    *rsa.PrivateKey
 	PublicKey     *rsa.PublicKey

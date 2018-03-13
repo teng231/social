@@ -5,20 +5,23 @@ import (
 )
 
 func (g *GinConfig) getUserFeed(ctx *gin.Context) {
-	uid := ctx.Param("uid")
+	userTarget := ctx.Param("userTarget")
 	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
-	if uid == "" {
+	if userTarget == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no user id",
+			"error": "no userTarget id",
 		})
+		return
 	}
-	err, feeds := g.cr.GetFeedByUser(limit, page, uid)
+	err, feeds := g.cr.LoadFeedByUser(limit, page, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
 		})
+		return
 	}
-	ctx.JSON(200, feeds)
+	ctx.JSON(200, gin.H{
+		"feeds": feeds})
 }
 
 func (g *GinConfig) getUserPost(ctx *gin.Context) {
@@ -28,33 +31,40 @@ func (g *GinConfig) getUserPost(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
 
-	err, posts := g.cr.GetPostUser(limit, page, uid)
+	err, posts := g.cr.LoadPostUser(limit, page, uid)
 
-	if err != nil {
-		ctx.JSON(400, gin.H{
-			"error": err,
-		})
-	}
-	ctx.JSON(200, posts)
-}
-
-func (g *GinConfig) getUserPostByID(ctx *gin.Context) {
-	pid := ctx.Param("pid")
-	if pid == "" {
-		ctx.JSON(400, gin.H{
-			"error": "no post id",
-		})
-	}
-	err, post := g.cr.GetPostID(pid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
 		})
 		return
 	}
-	ctx.JSON(200, post)
+	ctx.JSON(200, gin.H{
+		"posts": posts,
+	})
+}
+
+func (g *GinConfig) getPostByID(ctx *gin.Context) {
+	pid := ctx.Param("pid")
+	if pid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no post id",
+		})
+		return
+	}
+	err, post := g.cr.LoadPostID(pid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"post": post,
+	})
 }
 
 func (g *GinConfig) getCommentPost(ctx *gin.Context) {
@@ -64,28 +74,32 @@ func (g *GinConfig) getCommentPost(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
-	err, comments := g.cr.GetCommentByPostID(limit, page, pid)
+	err, comments := g.cr.LoadCommentByPostID(limit, page, pid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
 		})
 		return
 	}
-	ctx.JSON(200, comments)
+	ctx.JSON(200, gin.H{
+		"comment": comments,
+	})
 }
 
 func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
-	userID := ctx.Param("uid")
+	userTarget := ctx.Param("userTarget")
 	// get feed
 	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
-	if userID == "" {
+	if userTarget == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no uid",
+			"error": "no userTarget",
 		})
+		return
 	}
 	// get post
-	err, posts, users := g.cr.GetPostsByFeedUser(limit, page, userID)
+	err, posts, users := g.cr.LoadPostsByFeedUser(limit, page, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -101,20 +115,23 @@ func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 func (g *GinConfig) addCommentToPost(ctx *gin.Context) {
 	pid := ctx.Param("pid")
 	text := ctx.PostForm("text")
-	userID := ctx.PostForm("user_id")
+	userID := ctx.PostForm("uid")
 	if pid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
-	err, comments := g.cr.InsertCommentsToPost(pid, text, userID)
+	err, comments := g.cr.UpsertCommentsToPost(pid, text, userID)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
 		})
 		return
 	}
-	ctx.JSON(200, comments)
+	ctx.JSON(200, gin.H{
+		"comment": comments,
+	})
 }
 
 func (g *GinConfig) countLikeAPost(ctx *gin.Context) {
@@ -123,8 +140,9 @@ func (g *GinConfig) countLikeAPost(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
-	err, count := g.cr.GetCountLike(pid)
+	err, count := g.cr.LoadCountLike(pid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -141,13 +159,15 @@ func (g *GinConfig) unlikeAPost(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
 	if uid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no uid",
 		})
+		return
 	}
-	err := g.cr.UnlikePost(pid, uid)
+	err := g.cr.RemoveLikePost(pid, uid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -170,7 +190,7 @@ func (g *GinConfig) hitLikeAPost(ctx *gin.Context) {
 			"error": "no uid",
 		})
 	}
-	err := g.cr.HitLikePost(pid, uid)
+	err := g.cr.UpsertLikePost(pid, uid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -186,8 +206,9 @@ func (g *GinConfig) getUserLikeAPost(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
-	err, users := g.cr.GetUserLikePost(pid)
+	err, users := g.cr.LoadUserLikePost(pid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -198,19 +219,21 @@ func (g *GinConfig) getUserLikeAPost(ctx *gin.Context) {
 }
 
 func (g *GinConfig) checkOwnerLikePost(ctx *gin.Context) {
-	pid := ctx.Param("id")
+	pid := ctx.Param("pid")
 	uid := ctx.PostForm("uid")
 	if pid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
+		return
 	}
 	if uid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no uid",
 		})
+		return
 	}
-	err, ok := g.cr.OwnerLikePost(pid, uid)
+	err, ok := g.cr.CheckOwnerLikePost(pid, uid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -225,13 +248,14 @@ func (g *GinConfig) checkOwnerLikePost(ctx *gin.Context) {
 }
 
 func (g *GinConfig) getListFollowing(ctx *gin.Context) {
-	uid := ctx.Param("uid")
-	if uid == "" {
+	userTarget := ctx.Param("userTarget")
+	if userTarget == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no uid",
+			"error": "no userTarget",
 		})
+		return
 	}
-	err, users := g.cr.GetFollowingByUid(uid)
+	err, users := g.cr.LoadFollowingByUid(userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -239,19 +263,20 @@ func (g *GinConfig) getListFollowing(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{
-		"uid":   uid,
+		"uid":   userTarget,
 		"users": users,
 	})
 }
 
 func (g *GinConfig) getListFollower(ctx *gin.Context) {
-	uid := ctx.Param("uid")
-	if uid == "" {
+	userTarget := ctx.Param("userTarget")
+	if userTarget == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no uid",
+			"error": "no userTarget",
 		})
+		return
 	}
-	err, users := g.cr.GetFollowerByOwner(uid)
+	err, users := g.cr.LoadFollowerByOwner(userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -259,7 +284,7 @@ func (g *GinConfig) getListFollower(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{
-		"uid":   uid,
+		"uid":   userTarget,
 		"users": users,
 	})
 }
@@ -271,13 +296,15 @@ func (g *GinConfig) followAnUser(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no uid",
 		})
+		return
 	}
 	if owner == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no owner",
 		})
+		return
 	}
-	err := g.cr.FollowAnUser(uid, owner)
+	err := g.cr.UpsertFollowAnUser(uid, owner)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -296,13 +323,15 @@ func (g *GinConfig) unFollowAnUser(ctx *gin.Context) {
 		ctx.JSON(400, gin.H{
 			"error": "no uid",
 		})
+		return
 	}
 	if owner == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no owner",
 		})
+		return
 	}
-	err := g.cr.UnfollowAnUser(uid, owner)
+	err := g.cr.RemoveFollowAnUser(uid, owner)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": err,
@@ -311,5 +340,46 @@ func (g *GinConfig) unFollowAnUser(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{
 		"ok": true,
+	})
+}
+
+func (g *GinConfig) getAlbumById(ctx *gin.Context) {
+	abId := ctx.Param("abId")
+	if abId == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no abId",
+		})
+		return
+	}
+	err, albumInfo := g.cr.LoadAlbumById(abId)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"album": albumInfo,
+	})
+}
+
+func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
+	authorId := ctx.Param("authorId")
+	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	if authorId == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no authorId",
+		})
+		return
+	}
+	err, albums := g.cr.LoadAlbumByAuthor(limit, page, authorId)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"albums": albums,
 	})
 }

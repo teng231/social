@@ -7,7 +7,7 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) GetFeedByUser(limit, page int, userID string) (error, []*m.Feed) {
+func (p *Core) LoadFeedByUser(limit, page int, userID string) (error, []*m.Feed) {
 	err, feeds := p.Db.GetFeed(limit, page, userID)
 	if err != nil {
 		return err, nil
@@ -15,7 +15,7 @@ func (p *Core) GetFeedByUser(limit, page int, userID string) (error, []*m.Feed) 
 	return nil, feeds
 }
 
-func (p *Core) GetPostsByFeedUser(limit, page int, userID string) (error, []*m.Post, []*m.User) {
+func (p *Core) LoadPostsByFeedUser(limit, page int, userID string) (error, []*m.Post, []*m.User) {
 	err, feeds := p.Db.GetFeed(limit, page, userID)
 	if err != nil {
 		utils.ErrLog(err)

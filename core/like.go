@@ -5,7 +5,7 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) GetCountLike(postId string) (error, int) {
+func (p *Core) LoadCountLike(postId string) (error, int) {
 	err, count := p.Db.CountLike(postId)
 	if err != nil {
 		utils.ErrLog(err)
@@ -14,7 +14,7 @@ func (p *Core) GetCountLike(postId string) (error, int) {
 	return nil, count
 }
 
-func (p *Core) HitLikePost(postId, uID string) error {
+func (p *Core) UpsertLikePost(postId, uID string) error {
 	err := p.Db.HitLikePost(postId, uID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -23,7 +23,7 @@ func (p *Core) HitLikePost(postId, uID string) error {
 	return nil
 }
 
-func (p *Core) UnlikePost(postId, uID string) error {
+func (p *Core) RemoveLikePost(postId, uID string) error {
 	err := p.Db.UnlikePost(postId, uID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -32,7 +32,7 @@ func (p *Core) UnlikePost(postId, uID string) error {
 	return nil
 }
 
-func (p *Core) GetUserLikePost(postId string) (error, []*m.User) {
+func (p *Core) LoadUserLikePost(postId string) (error, []*m.User) {
 	// get like
 	err1, liked := p.Db.GetLikes(postId)
 	if err1 != nil {
@@ -54,7 +54,7 @@ func (p *Core) GetUserLikePost(postId string) (error, []*m.User) {
 	return nil, users
 }
 
-func (p *Core) OwnerLikePost(postId, uid string) (error, bool) {
+func (p *Core) CheckOwnerLikePost(postId, uid string) (error, bool) {
 	// get like
 	err, b := p.Db.IsUserLikePost(postId, uid)
 	if err != nil && b {

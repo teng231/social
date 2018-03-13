@@ -1,8 +1,6 @@
 package db
 
 import (
-	"github.com/my0sot1s/social/utils"
-
 	m "github.com/my0sot1s/social/mongo"
 
 	"gopkg.in/mgo.v2/bson"
@@ -40,7 +38,6 @@ func (db *DB) GetPost(limit, page int, userId string) (error, []*m.Post) {
 }
 
 func (db *DB) GetPostById(postID string) (error, *m.Post) {
-	utils.Log(postID)
 	collection := db.Db.C(postCollection)
 	var post *m.Post
 	err := collection.FindId(bson.ObjectIdHex(postID)).One(&post)
@@ -99,6 +96,16 @@ func (db *DB) GetAlbum(AlbumID string) (error, *m.Album) {
 		return err, nil
 	}
 	return nil, album
+}
+
+func (db *DB) GetAlbumByAuthor(limit, page int, userId string) (error, []*m.Album) {
+	collection := db.Db.C(albumCollection)
+	var albums []*m.Album
+	err := collection.Find(bson.M{"author": userId}).Skip(limit * (page - 1)).Limit(limit).All(&albums)
+	if err != nil {
+		return err, nil
+	}
+	return nil, albums
 }
 
 func (db *DB) GetComments(limit, page int, postID string) (error, []*m.Comment) {

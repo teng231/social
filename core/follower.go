@@ -8,7 +8,7 @@ import (
 )
 
 //GetFollowerByOwner  ai đang follow bạn `owner`
-func (p *Core) GetFollowerByOwner(owner string) (error, []*m.User) {
+func (p *Core) LoadFollowerByOwner(owner string) (error, []*m.User) {
 	err, follower := p.Db.GetFollower(owner)
 	listUserID := make([]string, 0)
 	for _, f := range follower {
@@ -31,7 +31,7 @@ func (p *Core) GetFollowerByOwner(owner string) (error, []*m.User) {
 }
 
 // GetFollowingByUid bạn đang follow những ai `userId`
-func (p *Core) GetFollowingByUid(uid string) (error, []*m.User) {
+func (p *Core) LoadFollowingByUid(uid string) (error, []*m.User) {
 	err, follower := p.Db.GetFollowing(uid)
 	listUserID := make([]string, 0)
 	for _, f := range follower {
@@ -53,7 +53,7 @@ func (p *Core) GetFollowingByUid(uid string) (error, []*m.User) {
 	return nil, users
 }
 
-func (p *Core) FollowAnUser(uid, owner string) error {
+func (p *Core) UpsertFollowAnUser(uid, owner string) error {
 	follow := &m.Follower{
 		Follower: uid,
 		Own:      owner,
@@ -66,7 +66,7 @@ func (p *Core) FollowAnUser(uid, owner string) error {
 	return nil
 }
 
-func (p *Core) UnfollowAnUser(uid, owner string) error {
+func (p *Core) RemoveFollowAnUser(uid, owner string) error {
 	err := p.Db.UnfollowUser(owner, uid)
 	if err != nil {
 		return err

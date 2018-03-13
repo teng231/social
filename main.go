@@ -11,7 +11,6 @@ import (
 	"github.com/my0sot1s/social/redis"
 	"github.com/my0sot1s/social/utils"
 
-	_ "github.com/heroku/x/hmetrics/onload"
 	"gopkg.in/yaml.v2"
 )
 
@@ -25,8 +24,6 @@ type Config struct {
 	RedisDB   string `yaml:"redis_Db" required:"true"`
 	RedisPass string `yaml:"redis_Password" required:"true"`
 }
-
-const root = "/Users/Te.Nguyen/GO_WORK_SPACE/src/github.com/my0sot1s/social"
 
 func loadConfig() *Config {
 	t := &Config{}
