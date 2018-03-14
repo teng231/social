@@ -33,6 +33,8 @@ func (g *GinConfig) ginStart() {
 	post := g.router.Group("/post")
 	post.GET("/:uid", g.getUserPost)
 	post.GET("/:uid/post/:pid", g.getPostByID)
+	post.POST("/:uid/create", g.createNewPost)
+	post.DELETE("/:uid/delete", g.createNewPost)
 
 	//comment
 	comment := g.router.Group("/comment")

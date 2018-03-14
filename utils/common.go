@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 )
 
@@ -21,4 +23,18 @@ func Contains(slice []string, item string) bool {
 
 	_, ok := set[item]
 	return ok
+}
+
+func Str2T(str string, T interface{}) error {
+	if str == "" {
+		e := errors.New("str empty")
+		ErrLog(e)
+		return e
+	}
+	err := json.Unmarshal([]byte(str), &T)
+	if err != nil {
+		ErrLog(err)
+		return err
+	}
+	return nil
 }

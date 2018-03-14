@@ -44,6 +44,7 @@ func (db *DB) CreateFeeds(feeds []*m.Feed) (error, []interface{}) {
 	feedDone := make([]interface{}, 0)
 	for _, feed := range feeds {
 		feed.ID = bson.NewObjectId()
+		feed.Created = time.Now()
 		feedDone = append(feedDone, *feed)
 	}
 	bulk.Insert(feedDone...)

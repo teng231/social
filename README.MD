@@ -18,30 +18,55 @@
 ## Sơ đồ hệ thống
 
 ```text
-                              +------------------------------------+
-                              |                                    |
-                     +--------v---------+                          |
-                +---->       Main       <-----------+              |
-                |    +-+----+---+-------+           |              |
-                |      |    |   |                   |  +--------+  |
-           Gin R|uter  |    |   |         Mongo Ad  |  |------| |  |
-+---+         +---+    | +--v---v---+       +-------+  +------+ |  |
-|   +--------->   |    | |          |       |  +------->      | |  |
-|API|         |   <----+ |   Core   |       |  |       |Mongo | |  |
-|   +<--------+   |      |          |       |  <-------+      | |  |
-+---+         +---+      +----------+       +--+       +------+ |  |
-                                                       +--------+  |
-                                                                   |
-                         +-----------+                             |
-                     +--->  Redis Ad +-----------------------------+
-                     |   +----+------+
-                     |        |
-                     |      +-v--------+
-                     |      |      +---+
-                     +------+ Redis Db
-                            |      +---+
-                            +----------+
+                  +-------+
+                  |       |
+                  | REDIS +------+                   +-------------+
+                  |       |      |                   |             |
+                  +-------+      |                   |             |
+                                (2)                  |             |
++-----------+                    |                   |             +-------(6)--+
+|           |                    |                   |             |            |
+| CONFIG ENV|                   +v-------+           |             |        +---v-----+
+|           |                   |        |           |             |        |         |        ^
++--------------------(0)-------->  MAIN  +----(4)---->             |        |   GIN   +--------+
+      +-------------------(3)--->        |           |    CORE     |        |         |
+      |     |                   ++-------+           |             |        +---+-----+
+      | WS  |                    ^                   |             |            |
+      |     |                    |                   |             <-----(5)----+
+      +-----+                    |                   |             |
+                                (1)                  |             |
+                  +--------+     |                   |             |
+                  |        |     |                   |             |
+                  | MONGO  +-----+                   |             |
+                  |        |                         +-------------+
+                  +--------+
+
 ```
+ * (0) Load config
+ * (1),(2),(3) Initial adapter mongo, redis, websoket
+ * (4) Initial Core, start core, add agument for core
+ * (5) Core receive process from gin
+ * (6) Core process then return result to gin
+### Setup
+ * Online here: [social](https://serene-headland-81432.herokuapp.com/)
+#### 1. Knowleage
+ * Golang office docs here [The Go programming language](https://golang.org/doc/)
+ * Golang by example [Go example](https://gobyexample.com/)
+ * Mongo office docs here [MongoDb](https://docs.mongodb.com/?_ga=2.47569767.1996944194.1521029475-988272004.1521029475)
+ * Redis office docs here [Redis](https://redis.io/documentation)
+
+#### 2. Get project
+
+```bash
+git clone https://github.com/my0sot1s/social.git
+cd social 
+dep ensure -update
+go run main.go
+# app run at localhost:4444
+```
+ * default `$PORT` =  `4444`
+ * local can run with my domain : `http://local.tenm.cf:4444`
+
 
 ### Core code 
 
@@ -118,8 +143,8 @@ type ICore interface {
 ```
 
 #### Các link tham khảo về thiết kế hệ thống.
-Cách sử dụng 1 số trick nhỏ khi làm js [https://jrsinclair.com/articles/2016/gentle-introduction-to-functional-javascript-functions/](https://jrsinclair.com/articles/2016/gentle-introduction-to-functional-javascript-functions/)
-
-Kiến trúc sạch - clean architecture là gì? [Kiến trúc sạch - clean architecture](https://techmaster.vn/posts/34271/kien-truc-sach-clean-architecture)
-
-A proposal for bundling reducers, action types and actions when using Redux [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)
+ * Cách sử dụng 1 số trick nhỏ khi làm js [https://jrsinclair.com/articles/2016/gentle-introduction-to-functional-javascript-functions/](https://jrsinclair.com/articles/2016/gentle-introduction-to-functional-javascript-functions/)
+ * Kiến trúc sạch - clean architecture là gì? [Kiến trúc sạch - clean architecture](https://techmaster.vn/posts/34271/kien-truc-sach-clean-architecture)
+ * A proposal for bundling reducers, action types and actions when using Redux [Ducks: Redux Reducer Bundles](https://github.com/erikras/ducks-modular-redux)
+ * `redux-saga` is a library for react [redux-saga](https://github.com/redux-saga/redux-saga)
+ * [Redux is a predictable state container for JavaScript apps.](https://redux.js.org/)

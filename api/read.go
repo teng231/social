@@ -383,3 +383,33 @@ func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
 		"albums": albums,
 	})
 }
+
+func (g *GinConfig) createNewPost(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	userID := ctx.PostForm("user_id")
+	content := ctx.PostForm("content")
+	tags := ctx.PostForm("tags")
+	medias := ctx.PostForm("medias")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no uid",
+		})
+		return
+	}
+	if userID == "" || content == "" || medias == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no userID or content or medias",
+		})
+		return
+	}
+	err, albums := g.cr.AddNewPostBonusFeed(userID, content, medias, tags string)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"albums": albums,
+	})
+}

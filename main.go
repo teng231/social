@@ -70,6 +70,7 @@ func main() {
 		wg.Done()
 	}()
 	wg.Wait()
+
 	// close when fn main down
 	defer beforeDestroy(mg, rdCli)
 	// create Core
