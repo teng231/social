@@ -23,7 +23,7 @@ func (g *GinConfig) createNewPost(ctx *gin.Context) {
 		})
 		return
 	}
-	err, albums := g.cr.AddNewPostBonusFeed(userID, content, medias, tags)
+	err, post := g.cr.AddNewPostBonusFeed(userID, content, medias, tags)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),
@@ -31,7 +31,7 @@ func (g *GinConfig) createNewPost(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{
-		"albums": albums,
+		"post": post,
 	})
 }
 

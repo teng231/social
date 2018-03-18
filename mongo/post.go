@@ -12,9 +12,9 @@ type Post struct {
 	UserID   string        `json:"user_id" bson:"user_id"`
 	Text     string        `json:"text" bson:"post_content"`
 	Created  time.Time     `json:"created" bson:"created"`
-	Modified time.Time     `json:"modified" bson:"modified"`
+	Modified time.Time     `json:"modified,omitempty" bson:"modified,omitempty"`
 	Media    []*Media      `json:"media" bson:"media"`
-	Tags     []string      `json:"tags" bson:"tags"`
+	Tags     []string      `json:"tags,omitempty" bson:"tags"`
 }
 
 func (p *Post) GetID() string {

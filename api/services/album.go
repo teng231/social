@@ -45,3 +45,38 @@ func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
 		"albums": albums,
 	})
 }
+
+func (g *GinConfig) createUserAlbum(ctx *gin.Context) {
+	authorId := ctx.Param("uid")
+	albumName := ctx.PostForm("name")
+	ownerID := ctx.PostForm("owner")
+	media := ctx.PostForm("media")
+	if authorId == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no authorId",
+		})
+		return
+	}
+	if ownerID == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no owner",
+		})
+		return
+	}
+	if media == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no media",
+		})
+		return
+	}
+	err, album := g.cr.UpsertAnAlbum(albumName, media, ownerID)
+	if err == nil {
+		ctx.JSON(400, gin.H{
+			"error": utils.ErrStr(err),
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"albums": album,
+	})
+}

@@ -1,4 +1,5 @@
 --- 
+GO_MODE: development
 HOST: local.tenm.cf:4444
 mgo_Host: ds147777.mlab.com:47777
 mgo_Database: telosma

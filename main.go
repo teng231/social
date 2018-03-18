@@ -16,6 +16,7 @@ import (
 )
 
 type Config struct {
+	GO_MODE   string `yaml:"GO_MODE" required:"true"`
 	HOST      string `yaml:"HOST" required:"true"`
 	DbHost    string `yaml:"mgo_Host" required:"true"`
 	DbName    string `yaml:"mgo_Database" required:"true"`
@@ -33,11 +34,6 @@ type Config struct {
 
 func loadConfig() *Config {
 	t := &Config{}
-	// yamlText, err := ioutil.ReadFile("config.yaml")
-	// if err != nil {
-	// 	utils.ErrLog(err)
-	// 	return nil
-	// }
 	yamlText, err := utils.ReadFileRoot("config.yaml")
 	err = yaml.Unmarshal(yamlText, t)
 	if err != nil {
@@ -56,10 +52,11 @@ func beforeDestroy(mg *db.DB, rc *redis.RedisCli) {
 	rc.Close()
 	mg.Close()
 }
-
 func main() {
 	c := loadConfig()
-	// register Db
+	if os.Getenv("ENV_MODE") == "production" {
+		c.HOST = "serene-headland-81432.herokuapp.com"
+	}
 	wg := sync.WaitGroup{}
 	wg.Add(3)
 	mg := &db.DB{}
@@ -77,8 +74,8 @@ func main() {
 		wg.Done()
 	}()
 	mailCtrl := &mail.EmailMgr{}
-	mailPort, e := strconv.Atoi(c.EmailPort)
 	go func() {
+		mailPort, e := strconv.Atoi(c.EmailPort)
 		mailCtrl.Config(c.EmailHost, c.EmailOwn, c.EmailPw, mailPort)
 		if e != nil {
 			utils.ErrLog(e)
@@ -99,4 +96,5 @@ func main() {
 	RESTful := &api.GinConfig{}
 	RESTful.Config(port, "", core)
 	RESTful.Run()
+
 }

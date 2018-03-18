@@ -10,9 +10,9 @@ type Album struct {
 	ID         bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	AlbumName  string        `json:"album_name" bson:"album_name`
 	AuthorID   string        `json:"author" bson:"author"`
-	AlbumMedia []*Media      `json:"media" bson:"album_media"`
+	AlbumMedia []Media       `json:"media" bson:"album_media"`
 	Created    time.Time     `json:"created" bson:"created"`
-	Modified   time.Time     `json:"modified" bson:"modified"`
+	Modified   time.Time     `json:"modified,omitempty" bson:"modified,omitempty"`
 }
 
 func (p *Album) GetID() string {

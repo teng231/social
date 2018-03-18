@@ -9,6 +9,7 @@ func (g *GinConfig) ginStart() {
 	album := g.router.Group("/album")
 	album.GET("/:uid/byId/:abId", g.getAlbumById)
 	album.GET("/:uid/byAuthor/:authorId", g.getAlbumByAuthor)
+	album.POST("/:uid/create", g.createUserAlbum)
 	// follow
 	follow := g.router.Group("/follow")
 	follow.GET("/:uid/follower/:userTarget", g.getListFollower)

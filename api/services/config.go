@@ -25,7 +25,7 @@ type GinConfig struct {
 // Config is a constructer
 func (g *GinConfig) Config(port, mode string, cr *core.Core) {
 	if mode == "" {
-		mode = gin.ReleaseMode
+		mode = gin.TestMode
 	}
 	// set mode `production` or `dev`
 	gin.SetMode(mode)
