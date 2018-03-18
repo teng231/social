@@ -20,7 +20,7 @@ func (m *EmailMgr) Config(host, username, password string, port int) {
 	m.Password = password
 	m.Username = username
 	m.PORT = port
-	m.MailDial = gomail.NewDialer(m.HOST, m.PORT, m.Username, m.Password)
+	m.MailDial = gomail.NewPlainDialer(m.HOST, m.PORT, m.Username, m.Password)
 	utils.Log("ಠ‿ಠ Gomail ad running ಠ‿ಠ")
 }
 

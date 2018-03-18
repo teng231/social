@@ -32,12 +32,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/heroku/x"
-  packages = ["hmetrics","hmetrics/onload"]
-  revision = "55e46844d4d75151d19a885ad01d55017df2c71e"
-
-[[projects]]
   name = "github.com/mattn/go-isatty"
   packages = ["."]
   revision = "0360b2af4f38e8d38c7fce2a9f4e702702d73a39"
@@ -62,10 +56,22 @@
   revision = "7dca6fe1f43775aa6d1334576870ff63f978f539"
 
 [[projects]]
+  branch = "v3"
+  name = "gopkg.in/alexcesaro/quotedprintable.v3"
+  packages = ["."]
+  revision = "2caba252f4dc53eaf6b553000885530023f54623"
+
+[[projects]]
   name = "gopkg.in/go-playground/validator.v8"
   packages = ["."]
   revision = "5f1438d3fca68893a817e4a66806cea46a9e4ebf"
   version = "v8.18.2"
+
+[[projects]]
+  name = "gopkg.in/gomail.v2"
+  packages = ["."]
+  revision = "41f3572897373c5538c50a2402db15db079fa4fd"
+  version = "2.0.0"
 
 [[projects]]
   branch = "v2"
@@ -82,6 +88,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f6334ccaeb7ae156c930ca21ed9c8f0675abbe8abd6812ea63959f80dc480295"
+  inputs-digest = "d24a9f1a1c30dd8d0c9cfe4274a076329f5364b00bce5a6d5e8da1644460b137"
   solver-name = "gps-cdcl"
   solver-version = 1
