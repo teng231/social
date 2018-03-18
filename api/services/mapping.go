@@ -44,4 +44,11 @@ func (g *GinConfig) ginStart() {
 	// auth
 	g.router.POST("login", g.Login)
 	g.router.POST("register", g.Register)
+	g.router.GET("confirm/:uid/:token", g.confirmToken)
+	// g.router.GET("/abc", func(ctx *gin.Context) {
+	// 	err := errors.New("1111")
+	// 	ctx.JSON(200, gin.H{
+	// 		"error": utils.ErrStr(err),
+	// 	})
+	// })
 }

@@ -37,7 +37,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 		})
 		return
 	}
-	err, user, token := g.cr.Register(&mongo.User{
+	err, user := g.cr.Register(&mongo.User{
 		UserName: username,
 		Password: password,
 		Email:    email,
@@ -49,7 +49,22 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{
-		"token": token,
-		"user":  user,
+		"user": user,
 	})
+}
+
+func (g *GinConfig) confirmToken(ctx *gin.Context) {
+	token := ctx.Param("token")
+	uid := ctx.Param("uid")
+	err := g.cr.CheckKeyToken(token, uid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"state": "activated",
+	})
+
 }

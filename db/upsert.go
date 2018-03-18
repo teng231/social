@@ -147,3 +147,25 @@ func (db *DB) UnfollowUser(own, uid string) error {
 	}
 	return nil
 }
+
+func (db *DB) UpdateStateUser(uid, state string) error {
+	collection := db.Db.C(userCollection)
+	selector := bson.M{"_id": bson.ObjectIdHex(uid), "state": "pendding"}
+	update := bson.M{"$set": bson.M{"state": state}}
+	err := collection.Update(selector, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *DB) UpdateUserPassword(uid, password string) error {
+	collection := db.Db.C(userCollection)
+	selector := bson.M{"user_id": bson.ObjectIdHex(uid)}
+	update := bson.M{"$set": bson.M{"password": password}}
+	err := collection.Update(selector, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}

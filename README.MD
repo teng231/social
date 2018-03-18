@@ -1,7 +1,7 @@
 # Core system: Backend golang for social networking
 
 <center>
-  <img src='./social.jpg'/>
+  <img src='./statics/social.jpg'/>
   </br>
 </center>
 

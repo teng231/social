@@ -1,13 +1,14 @@
 package main
 
 import (
-	"io/ioutil"
 	"os"
+	"strconv"
 	"sync"
 
-	"github.com/my0sot1s/social/api"
+	"github.com/my0sot1s/social/api/services"
 	"github.com/my0sot1s/social/core"
 	"github.com/my0sot1s/social/db"
+	"github.com/my0sot1s/social/mail"
 	"github.com/my0sot1s/social/redis"
 	"github.com/my0sot1s/social/utils"
 
@@ -15,6 +16,7 @@ import (
 )
 
 type Config struct {
+	HOST      string `yaml:"HOST" required:"true"`
 	DbHost    string `yaml:"mgo_Host" required:"true"`
 	DbName    string `yaml:"mgo_Database" required:"true"`
 	Username  string `yaml:"mgo_Username" required:"true"`
@@ -23,15 +25,20 @@ type Config struct {
 	RedisHost string `yaml:"redis_Host" required:"true"`
 	RedisDB   string `yaml:"redis_Db" required:"true"`
 	RedisPass string `yaml:"redis_Password" required:"true"`
+	EmailHost string `yaml:"email_Host" required:"true"`
+	EmailOwn  string `yaml:"email" required:"true"`
+	EmailPw   string `yaml:"email_P" required:"true"`
+	EmailPort string `yaml:"email_Port" required:"true"`
 }
 
 func loadConfig() *Config {
 	t := &Config{}
-	yamlText, err := ioutil.ReadFile("config.yaml")
-	if err != nil {
-		utils.ErrLog(err)
-		return nil
-	}
+	// yamlText, err := ioutil.ReadFile("config.yaml")
+	// if err != nil {
+	// 	utils.ErrLog(err)
+	// 	return nil
+	// }
+	yamlText, err := utils.ReadFileRoot("config.yaml")
 	err = yaml.Unmarshal(yamlText, t)
 	if err != nil {
 		utils.ErrLog(err)
@@ -54,7 +61,7 @@ func main() {
 	c := loadConfig()
 	// register Db
 	wg := sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(3)
 	mg := &db.DB{}
 	go func() {
 		mg.Config(c.DbHost, c.DbName, c.Username, c.Password)
@@ -69,13 +76,21 @@ func main() {
 		}
 		wg.Done()
 	}()
+	mailCtrl := &mail.EmailMgr{}
+	mailPort, e := strconv.Atoi(c.EmailPort)
+	go func() {
+		mailCtrl.Config(c.EmailHost, c.EmailOwn, c.EmailPw, mailPort)
+		if e != nil {
+			utils.ErrLog(e)
+		}
+		wg.Done()
+	}()
 	wg.Wait()
-
 	// close when fn main down
 	defer beforeDestroy(mg, rdCli)
 	// create Core
 	core := &core.Core{}
-	core.Config(mg, rdCli, "keys/id_rsa", "keys/id_rsa.pub")
+	core.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
 	// create RESTful
 	port := os.Getenv("PORT")
 	if port == "" {

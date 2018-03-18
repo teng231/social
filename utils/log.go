@@ -1,8 +1,11 @@
 package utils
 
 import (
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
+	"path/filepath"
 	"runtime"
 )
 
@@ -22,4 +25,16 @@ func ErrLog(err error) (b bool) {
 		b = true
 	}
 	return
+}
+
+func ReadFileRoot(path string) ([]byte, error) {
+	if &path == nil || path == "" {
+		return nil, errors.New("no path")
+	}
+	absPath, _ := filepath.Abs(path)
+	data, err := ioutil.ReadFile(absPath)
+	if err != nil {
+		ErrLog(err)
+	}
+	return data, err
 }

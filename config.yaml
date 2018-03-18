@@ -1,4 +1,5 @@
 --- 
+HOST: local.tenm.cf:4444
 mgo_Host: ds147777.mlab.com:47777
 mgo_Database: telosma
 mgo_Password: 123321
@@ -7,3 +8,7 @@ gin_PORT: 4444
 redis_Host: redis-16703.c10.us-east-1-2.ec2.cloud.redislabs.com:16703
 redis_Password: 95manhte
 redis_Db: redis-node
+email_Host: smtp.zoho.com
+email: tenmit@zoho.com 
+email_P: 95manhte
+email_Port: 587

@@ -2,14 +2,17 @@ package core
 
 import (
 	dbase "github.com/my0sot1s/social/db"
+	"github.com/my0sot1s/social/mail"
 	m "github.com/my0sot1s/social/mongo"
 	"github.com/my0sot1s/social/redis"
 )
 
 type Core struct {
-	Db    ICore
-	token *JWTAuthentication
-	rd    *redis.RedisCli
+	HOST   string
+	Db     ICore
+	token  *JWTAuthentication
+	rd     *redis.RedisCli
+	mailAd *mail.EmailMgr
 }
 
 type ICore interface {
@@ -42,9 +45,12 @@ type ICore interface {
 	FollowUser(f *m.Follower) error
 	UnfollowUser(own, uid string) error
 	//
+	UpdateStateUser(uid, state string) error
+	UpdateUserPassword(uid, password string) error
 }
 
-func (c *Core) Config(db *dbase.DB, rd *redis.RedisCli, privateKeyPath, PublicKeyPath string) {
+func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mail.EmailMgr, privateKeyPath, PublicKeyPath string) {
+	c.HOST = host
 	// connect to drive Mongo
 	c.Db = db
 	// connect token access
@@ -52,4 +58,6 @@ func (c *Core) Config(db *dbase.DB, rd *redis.RedisCli, privateKeyPath, PublicKe
 	c.token.Config(privateKeyPath, PublicKeyPath)
 	// connect drive Redis
 	c.rd = rd
+	// connect mail adapters
+	c.mailAd = mailAd
 }

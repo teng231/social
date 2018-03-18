@@ -38,3 +38,7 @@ func Str2T(str string, T interface{}) error {
 	}
 	return nil
 }
+
+func ErrStr(err error) string {
+	return fmt.Sprintf("%v", err)
+}

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -115,6 +116,10 @@ func (c *Core) Login(username, password string) (error, *m.User, string) {
 		utils.ErrLog(err)
 		return errors.New("user khong ton tai"), nil, ""
 	}
+	if user.GetState() != "activated" {
+		utils.ErrLog(errors.New("account not actived"))
+		return errors.New("account not actived"), nil, ""
+	}
 	if !comparePassword(password, user.GetPassword()) {
 		utils.ErrLog(err)
 		return errors.New("password false"), nil, ""
@@ -127,18 +132,18 @@ func (c *Core) Login(username, password string) (error, *m.User, string) {
 	return nil, user, tokenString
 }
 
-func (c *Core) Register(user *m.User) (error, *m.User, string) {
+func (c *Core) Register(user *m.User) (error, *m.User) {
 	username := user.GetUserName()
 
 	if username == "" || user.GetEmail() == "" || user.GetPassword() == "" {
 		utils.ErrLog(errors.New("No username or email or password"))
-		return errors.New("No username or email or password"), nil, ""
+		return errors.New("No username or email or password"), nil
 	}
 	err, _user := c.Db.GetUserByUname(username)
 
 	if _user != nil {
 		utils.ErrLog(errors.New("username is exist"))
-		return errors.New("username is exist"), nil, ""
+		return errors.New("username is exist"), nil
 	}
 
 	utils.Log(user.GetEmail())
@@ -147,42 +152,72 @@ func (c *Core) Register(user *m.User) (error, *m.User, string) {
 	if email != nil {
 
 		utils.ErrLog(errors.New("email is exist"))
-		return errors.New("email is exist"), nil, ""
+		return errors.New("email is exist"), nil
 	}
 
 	if len(user.GetPassword()) < 6 {
 
 		utils.ErrLog(errors.New("password short"))
-		return errors.New("password short"), nil, ""
+		return errors.New("password short"), nil
 	}
 	user.SetPassword(generateHashPassword(user.GetPassword()))
 	user.Created = time.Now()
-	user.State = "actived"
+	user.State = "pendding"
 	e, newUser := c.Db.CreateUser(user)
 
 	if e != nil {
 		utils.ErrLog(e)
-		return err, nil, ""
+		return err, nil
 	}
 	_, tokenString := c.token.GenerateToken(newUser.GetID())
-	newUser.SetPassword("")
-	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset)
+	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset*48) // a day
 	utils.Log(user.GetID())
-	return e, newUser, tokenString
-}
-
-func (c *Core) CheckTokenExpired(tokenString string) string {
-	uid, err := c.rd.GetValue(tokenString)
-
+	utils.Log(tokenString)
+	// send email
+	// read Email
+	data, err := utils.ReadFileRoot("./mail/confirm.htm")
 	if err != nil {
 		utils.ErrLog(err)
-		return ""
+		return err, nil
 	}
-	return uid
+	link := fmt.Sprintf("http://%s/confirm/%s/%s", c.HOST, user.GetID() ,tokenString)
+	emailContent := strings.Replace(string(data), "##link##", link, 1)
+	c.mailAd.SendMail(c.mailAd.Username, emailContent, "Confirm create Account", user.GetEmail())
+	return e, newUser
 }
 
-func (c *Core) ChangePassword(oldPass, newPass string) bool {
-	return true
+func (c *Core) ActivedAccount(uid string) error {
+	err := c.Db.UpdateStateUser(uid, "activated")
+	if err != nil {
+		utils.ErrLog(err)
+		return err
+	}
+	return nil
+}
+
+// func (c *Core) CheckTokenExpired(tokenString string) string {
+// 	uid, err := c.rd.GetValue(tokenString)
+// 	if err != nil {
+// 		utils.ErrLog(err)
+// 		return ""
+// 	}
+// 	return uid
+// }
+
+func (c *Core) ChangePassword(username, oldPass, newPass string) error {
+	err, user := c.Db.GetUserByUname(username)
+	if err != nil {
+		utils.ErrLog(err)
+		return err
+	}
+	if generateHashPassword(oldPass) == user.GetPassword() {
+		err2 := c.Db.UpdateUserPassword(user.GetID(), generateHashPassword(newPass))
+		if err2 != nil {
+			utils.ErrLog(err2)
+			return err2
+		}
+	}
+	return nil
 }
 
 func (c *Core) getUserByIDs(uIDs []string) (error, []*m.User) {
@@ -195,4 +230,26 @@ func (c *Core) getUserByIDs(uIDs []string) (error, []*m.User) {
 		v.SetPassword("")
 	}
 	return err, users
+}
+func (c *Core) CheckKeyToken(token, uidOwn string) error {
+	uid, err := c.rd.GetValue(token)
+	if err != nil {
+		utils.ErrLog(err)
+		return err
+	}
+	if strings.Trim(uid, " ") != strings.Trim(uidOwn, " ") {
+		return errors.New("uid not equal")
+	}
+	_, err2 := c.rd.DelKey([]string{token})
+	if err2 != nil {
+		utils.ErrLog(err2)
+		return err2
+	}
+	utils.Log(uidOwn)
+	err3 := c.Db.UpdateStateUser(uidOwn, "activated")
+	if err3 != nil {
+		utils.ErrLog(err3)
+		return err3
+	}
+	return nil
 }

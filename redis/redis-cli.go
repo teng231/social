@@ -1,7 +1,6 @@
 package redis
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/go-redis/redis"
@@ -22,8 +21,12 @@ func (rc *RedisCli) Config(redisHost, redisDb, redisPass string) error {
 	})
 	rc.duration = 60 * 10 * time.Second // 10 phut
 
-	pong, err := rc.client.Ping().Result()
-	fmt.Println(pong, err)
+	_, err := rc.client.Ping().Result()
+	// fmt.Println(pong, err)
+	if err != nil {
+		utils.ErrLog(err)
+		return err
+	}
 	utils.Log("ಠ‿ಠ Redis connected ಠ‿ಠ")
 	return nil
 }
@@ -38,4 +41,9 @@ func (rc *RedisCli) SetValue(key string, value string, expiration time.Duration)
 func (rc *RedisCli) GetValue(key string) (string, error) {
 	val, err := rc.client.Get(key).Result()
 	return val, err
+}
+
+func (rc *RedisCli) DelKey(key []string) (int, error) {
+	val, err := rc.client.Del(key...).Result()
+	return int(val), err
 }
