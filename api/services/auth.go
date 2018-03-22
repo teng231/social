@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/my0sot1s/social/mongo"
+	"github.com/my0sot1s/social/utils"
 )
 
 func (g *GinConfig) Login(ctx *gin.Context) {
@@ -17,7 +18,7 @@ func (g *GinConfig) Login(ctx *gin.Context) {
 	err, user, token := g.cr.Login(username, password)
 	if err != nil {
 		ctx.JSON(400, gin.H{
-			"error": err,
+			"error": utils.ErrStr(err),
 		})
 		return
 	}
@@ -44,7 +45,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 	})
 	if err != nil {
 		ctx.JSON(400, gin.H{
-			"error": err,
+			"error": utils.ErrStr(err),
 		})
 		return
 	}
@@ -59,7 +60,7 @@ func (g *GinConfig) confirmToken(ctx *gin.Context) {
 	err := g.cr.CheckKeyToken(token, uid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
-			"error": err,
+			"error": utils.ErrStr(err),
 		})
 		return
 	}

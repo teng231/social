@@ -17,9 +17,21 @@ func (g *GinConfig) createNewPost(ctx *gin.Context) {
 		})
 		return
 	}
-	if userID == "" || content == "" || medias == "" {
+	if userID == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no userID or content or medias",
+			"error": "no userID",
+		})
+		return
+	}
+	if content == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no content ",
+		})
+		return
+	}
+	if medias == "" {
+		ctx.JSON(400, gin.H{
+			"error": "medias",
 		})
 		return
 	}

@@ -82,7 +82,7 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 		}
 		feed := &m.Feed{
 			Created:    time.Now(),
-			ConsumerID: owner,
+			ConsumerID: v.GetFollower(),
 			PostID:     p.GetID(),
 		}
 		feeds = append(feeds, feed)
