@@ -74,7 +74,12 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 	}
 	// find all user follow own
 	err, follower := c.Db.GetFollower(owner)
-	feeds := make([]*m.Feed, 0)
+	feeds := make([]*m.Feed, 1)
+	feeds[0] = &m.Feed{
+		Created:    time.Now(),
+		ConsumerID: owner,
+		PostID:     p.GetID(),
+	}
 	for _, v := range follower {
 		peopleFollowOwner := v.GetFollower()
 		if peopleFollowOwner == "" {

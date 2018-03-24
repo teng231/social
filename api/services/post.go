@@ -113,3 +113,20 @@ func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 		"users": users,
 	})
 }
+
+func (g *GinConfig) postDemo(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	postForm := ctx.PostForm("postForm")
+	if postForm == "" {
+		ctx.JSON(400, gin.H{
+			"error": "postForm is nil",
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"success": gin.H{
+			"postForm": postForm,
+			"uid":      uid,
+		},
+	})
+}
