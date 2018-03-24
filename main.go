@@ -86,15 +86,16 @@ func main() {
 	// close when fn main down
 	defer beforeDestroy(mg, rdCli)
 	// create Core
-	core := &core.Core{}
-	core.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
+	mainCore := &core.Core{}
+	mainCore.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
+
 	// create RESTful
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = c.PORT
 	}
 	RESTful := &api.GinConfig{}
-	RESTful.Config(port, "", core)
+	RESTful.Config(port, "", mainCore)
 	RESTful.Run()
 
 }

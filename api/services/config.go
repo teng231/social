@@ -54,6 +54,13 @@ func (g *GinConfig) ginStarted(ctx *gin.Context) {
 	ctx.String(200, "Gin started")
 }
 
+func (g *GinConfig) signatureFileToUpload(ctx *gin.Context) {
+	signature := g.cr.SignFileToUpload()
+	ctx.JSON(200, gin.H{
+		"signature": signature,
+	})
+}
+
 func (g *GinConfig) getLimitPage(strLimit, strPage string) (int, int) {
 	limit, err1 := strconv.Atoi(strLimit)
 	page, err2 := strconv.Atoi(strPage)
