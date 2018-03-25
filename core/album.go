@@ -8,8 +8,8 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadAlbumByAuthor(limit, page int, userID string) (error, []*m.Album) {
-	err, albums := p.Db.GetAlbumByAuthor(limit, page, userID)
+func (p *Core) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.Album) {
+	err, albums := p.Db.GetAlbumByAuthor(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
 		return err, nil

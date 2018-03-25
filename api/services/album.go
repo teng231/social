@@ -27,14 +27,14 @@ func (g *GinConfig) getAlbumById(ctx *gin.Context) {
 
 func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
 	authorId := ctx.Param("authorId")
-	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if authorId == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no authorId",
 		})
 		return
 	}
-	err, albums := g.cr.LoadAlbumByAuthor(limit, page, authorId)
+	err, albums := g.cr.LoadAlbumByAuthor(limit, anchor, authorId)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),

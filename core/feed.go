@@ -5,16 +5,16 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadFeedByUser(limit, page int, userID string) (error, []*m.Feed) {
-	err, feeds := p.Db.GetFeed(limit, page, userID)
+func (p *Core) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Feed) {
+	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
 		return err, nil
 	}
 	return nil, feeds
 }
 
-func (p *Core) LoadPostsByFeedUser(limit, page int, userID string) (error, []*m.Post, []*m.User) {
-	err, feeds := p.Db.GetFeed(limit, page, userID)
+func (p *Core) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, []*m.User) {
+	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
 		return err, nil, nil

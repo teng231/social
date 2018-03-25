@@ -1,15 +1,17 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type User struct {
 	ID        bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Password  string        `json:"password,omitempty" bson:"password"`
-	AlbumName string        `json:"album_name" bson:"album_name`
+	AlbumName string        `json:"albumname" bson:"albumname"`
 	UserName  string        `json:"username" bson:"username"`
 	Email     string        `json:"email" bson:"email"`
 	Created   time.Time     `json:"created" bson:"created"`
@@ -18,6 +20,12 @@ type User struct {
 	State     string        `json:"state" bson:"state"`
 }
 
+func (p *User) ToUser(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
+}
 func (p *User) SetPassword(newPw string) {
 	p.Password = newPw
 }

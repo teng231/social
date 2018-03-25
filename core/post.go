@@ -8,8 +8,8 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadPostByUser(limit, page int, user string) (error, []*m.Post) {
-	err, posts := p.Db.GetPost(limit, page, user)
+func (p *Core) LoadPostByUser(limit int, anchor, user string) (error, []*m.Post) {
+	err, posts := p.Db.GetPost(limit, anchor, user)
 	for _, value := range posts {
 		utils.Log(value.ID)
 	}
@@ -27,8 +27,8 @@ func (p *Core) LoadPostID(pid string) (error, *m.Post) {
 	return nil, post
 }
 
-func (p *Core) LoadPostUser(limit, page int, userID string) (error, []*m.Post) {
-	err, posts := p.Db.GetPost(limit, page, userID)
+func (p *Core) LoadPostUser(limit int, anchor, userID string) (error, []*m.Post) {
+	err, posts := p.Db.GetPost(limit, anchor, userID)
 	if err != nil {
 		return err, nil
 	}

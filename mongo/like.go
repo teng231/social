@@ -1,8 +1,10 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -12,6 +14,13 @@ type Like struct {
 	UserID  string        `json:"user_id" bson:"user_id"`
 	Created time.Time     `json:"created" bson:"created"`
 	State   bool          `json:"state" bson:"state"`
+}
+
+func (p *Like) ToLike(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
 }
 
 func (p *Like) GetID() string {

@@ -1,18 +1,29 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
 type Album struct {
 	ID         bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	AlbumName  string        `json:"album_name" bson:"album_name`
+	AlbumName  string        `json:"album_name" bson:"album_name"`
 	AuthorID   string        `json:"author" bson:"author"`
-	AlbumMedia []Media       `json:"media" bson:"album_media"`
+	AlbumMedia []Media       `json:"album_media" bson:"album_media"`
 	Created    time.Time     `json:"created" bson:"created"`
 	Modified   time.Time     `json:"modified,omitempty" bson:"modified,omitempty"`
+}
+
+func (p *Album) ToAlbum(m map[string]interface{}) {
+	utils.Log(m)
+	m["id"] = m["_id"]
+	utils.Log(m)
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
 }
 
 func (p *Album) GetID() string {

@@ -180,7 +180,7 @@ func (c *Core) Register(user *m.User) (error, *m.User) {
 		utils.ErrLog(err)
 		return err, nil
 	}
-	link := fmt.Sprintf("http://%s/confirm/%s/%s", c.HOST, user.GetID() ,tokenString)
+	link := fmt.Sprintf("http://%s/confirm/%s/%s", c.HOST, user.GetID(), tokenString)
 	emailContent := strings.Replace(string(data), "##link##", link, 1)
 	c.mailAd.SendMail(c.mailAd.Username, emailContent, "Confirm create Account", user.GetEmail())
 	return e, newUser
@@ -221,7 +221,7 @@ func (c *Core) ChangePassword(username, oldPass, newPass string) error {
 }
 
 func (c *Core) getUserByIDs(uIDs []string) (error, []*m.User) {
-	err, users := c.Db.GetUserOwns(uIDs)
+	err, users := c.Db.GetUserByIds(uIDs)
 	if err != nil {
 		utils.ErrLog(err)
 		return nil, nil
@@ -252,4 +252,8 @@ func (c *Core) CheckKeyToken(token, uidOwn string) error {
 		return err3
 	}
 	return nil
+}
+
+func getUserByCondition() {
+
 }

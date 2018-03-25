@@ -1,8 +1,10 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -10,13 +12,19 @@ import (
 type Post struct {
 	ID       bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	UserID   string        `json:"user_id" bson:"user_id"`
-	Text     string        `json:"text" bson:"post_content"`
+	Text     string        `json:"text" bson:"text"`
 	Created  time.Time     `json:"created" bson:"created"`
 	Modified time.Time     `json:"modified,omitempty" bson:"modified,omitempty"`
 	Media    []*Media      `json:"media" bson:"media"`
 	Tags     []string      `json:"tags,omitempty" bson:"tags"`
 }
 
+func (p *Post) ToPost(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
+}
 func (p *Post) GetID() string {
 	if !p.ID.Valid() {
 		return ""

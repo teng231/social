@@ -61,19 +61,16 @@ func (g *GinConfig) signatureFileToUpload(ctx *gin.Context) {
 	})
 }
 
-func (g *GinConfig) getLimitPage(strLimit, strPage string) (int, int) {
+func (g *GinConfig) getLimitPage(strLimit, anchor string) (int, string) {
 	limit, err1 := strconv.Atoi(strLimit)
-	page, err2 := strconv.Atoi(strPage)
 
 	if err1 != nil {
 		limit = DEFAULT_LIMIT
 	}
-
-	if err2 != nil {
-		page = DEFAULT_PAGE
+	if &anchor == nil {
+		anchor = ""
 	}
-
-	return limit, page
+	return limit, anchor
 }
 
 func (g *GinConfig) sendFavicon(ctx *gin.Context) {

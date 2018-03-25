@@ -1,8 +1,10 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -10,8 +12,15 @@ type Comment struct {
 	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	PostID  string        `json:"post_id" bson:"post_id"`
 	UserID  string        `json:"user_id" bson:"user_id"`
-	Text    string        `json:"text" bson:"content"`
+	Text    string        `json:"text" bson:"text"`
 	Created time.Time     `json:"created" bson:"created"`
+}
+
+func (p *Comment) ToComment(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
 }
 
 func (p *Comment) GetID() string {

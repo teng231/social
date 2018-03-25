@@ -1,8 +1,10 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -14,6 +16,12 @@ type Follower struct {
 	State    bool          `json:"state" bson:"state"`
 }
 
+func (p *Follower) ToFollower(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
+}
 func (p *Follower) GetID() string {
 	if !p.ID.Valid() {
 		return ""

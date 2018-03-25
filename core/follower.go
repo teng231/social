@@ -21,7 +21,7 @@ func (p *Core) LoadFollowerByOwner(owner string) (error, []*m.User) {
 		utils.ErrLog(err)
 		return err, nil
 	}
-	err2, users := p.Db.GetUserOwns(listUserID)
+	err2, users := p.Db.GetUserByIds(listUserID)
 	// get List user by 1 request
 	if err2 != nil {
 		utils.ErrLog(err2)
@@ -45,7 +45,7 @@ func (p *Core) LoadFollowingByUid(uid string) (error, []*m.User) {
 		return err, nil
 	}
 
-	err2, users := p.Db.GetUserOwns(listUserID)
+	err2, users := p.Db.GetUserByIds(listUserID)
 	if err2 != nil {
 		utils.ErrLog(err2)
 		return err2, nil

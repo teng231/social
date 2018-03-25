@@ -43,7 +43,7 @@ func (p *Core) LoadUserLikePost(postId string) (error, []*m.User) {
 	for _, v := range liked {
 		uIDs = append(uIDs, v.GetUserID())
 	}
-	err, users := p.Db.GetUsersLikePost(uIDs)
+	err, users := p.Db.GetUserByIds(uIDs)
 	if err != nil {
 		utils.ErrLog(err)
 		return err, nil

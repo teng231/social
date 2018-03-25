@@ -8,8 +8,8 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadCommentByPostID(limit, page int, postId string) (error, []*m.Comment) {
-	err, comments := p.Db.GetComments(limit, page, postId)
+func (p *Core) LoadCommentByPostID(limit int, anchor, postId string) (error, []*m.Comment) {
+	err, comments := p.Db.GetComments(limit, anchor, postId)
 	if err != nil {
 		return err, nil
 	}

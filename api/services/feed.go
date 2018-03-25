@@ -7,14 +7,14 @@ import (
 
 func (g *GinConfig) getUserFeed(ctx *gin.Context) {
 	userTarget := ctx.Param("userTarget")
-	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if userTarget == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no userTarget id",
 		})
 		return
 	}
-	err, feeds := g.cr.LoadFeedByUser(limit, page, userTarget)
+	err, feeds := g.cr.LoadFeedByUser(limit, anchor, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),

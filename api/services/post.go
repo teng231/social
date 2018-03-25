@@ -49,7 +49,7 @@ func (g *GinConfig) createNewPost(ctx *gin.Context) {
 
 func (g *GinConfig) getUserPost(ctx *gin.Context) {
 	uid := ctx.Param("uid")
-	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if uid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
@@ -57,7 +57,7 @@ func (g *GinConfig) getUserPost(ctx *gin.Context) {
 		return
 	}
 
-	err, posts := g.cr.LoadPostUser(limit, page, uid)
+	err, posts := g.cr.LoadPostUser(limit, anchor, uid)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{
@@ -93,7 +93,7 @@ func (g *GinConfig) getPostByID(ctx *gin.Context) {
 func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 	userTarget := ctx.Param("userTarget")
 	// get feed
-	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if userTarget == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no userTarget",
@@ -101,7 +101,7 @@ func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 		return
 	}
 	// get post
-	err, posts, users := g.cr.LoadPostsByFeedUser(limit, page, userTarget)
+	err, posts, users := g.cr.LoadPostsByFeedUser(limit, anchor, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),

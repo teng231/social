@@ -29,14 +29,14 @@ func (g *GinConfig) addCommentToPost(ctx *gin.Context) {
 
 func (g *GinConfig) getCommentPost(ctx *gin.Context) {
 	pid := ctx.Param("pid")
-	limit, page := g.getLimitPage(ctx.Query("limit"), ctx.Query("page"))
+	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if pid == "" {
 		ctx.JSON(400, gin.H{
 			"error": "no post id",
 		})
 		return
 	}
-	err, comments := g.cr.LoadCommentByPostID(limit, page, pid)
+	err, comments := g.cr.LoadCommentByPostID(limit, anchor, pid)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),

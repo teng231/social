@@ -88,7 +88,7 @@ func main() {
 	// create Core
 	mainCore := &core.Core{}
 	mainCore.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
-
+	mainCore.CoreTest()
 	// create RESTful
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -1,8 +1,10 @@
 package mongo
 
 import (
+	"encoding/json"
 	"time"
 
+	"github.com/my0sot1s/social/utils"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -11,6 +13,13 @@ type Feed struct {
 	ConsumerID string        `json:"comsumer_id" bson:"comsumer_id"`
 	PostID     string        `json:"post_id" bson:"post_id"`
 	Created    time.Time     `json:"created" bson:"created"`
+}
+
+func (p *Feed) ToFeed(m map[string]interface{}) {
+	m["id"] = m["_id"]
+	str, err := json.Marshal(m)
+	utils.ErrLog(err)
+	json.Unmarshal(str, &p)
 }
 
 func (p *Feed) GetID() string {
