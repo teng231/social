@@ -47,8 +47,8 @@ type ICore interface {
 	UnfollowUser(own, uid string) error
 	//
 	UpdateStateUser(uid, state string) error
-	ReadById(cName, anyId string) (error, map[string]interface{})
-	ReadByIdCondition(cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{})
+	// ReadById(cName, anyId string) (error, map[string]interface{})
+	// ReadByIdCondition(cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{})
 	UpdateUserPassword(uid, password string) error
 }
 
@@ -65,14 +65,4 @@ func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mai
 	c.mailAd = mailAd
 }
 
-func (c *Core) CoreTest() {
-	// _, data := c.Db.ReadById("social_user", "5a105af0cb8eae85d819a78b")
-	// var user *m.User
-	// _, data := c.Db.ReadByIdCondition("social_user", "5a1073ee64c944893d0176ab", -2)
-	// data["id"] = data["_id"]
-	// userStr, _ := json.Marshal(data)
-	// u := &m.User{}
-	// json.Unmarshal(userStr, &u)
-	// u.ToUser(data)
-	// utils.Log(u.GetAlbumName())
-}
+func (c *Core) CoreTest() {}
