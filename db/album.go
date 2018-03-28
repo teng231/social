@@ -29,12 +29,12 @@ func (db *DB) GetAlbumByAuthor(limit int, anchor, userId string) (error, []*m.Al
 	return nil, albums
 }
 
-func (db *DB) CreateAlbum(a *m.Album) (error, *m.Album) {
+func (db *DB) CreateAlbum(a *m.Album) error {
 	collection := db.Db.C(albumCollection)
 	a.ID = bson.NewObjectId()
 	err := collection.Insert(&a)
 	if err != nil {
-		return err, nil
+		return err
 	}
-	return nil, a
+	return nil
 }
