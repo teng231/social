@@ -68,7 +68,7 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 	}
 	post.Created = time.Now()
 	// create post
-	err, p := c.Db.CreatePost(post)
+	err := c.Db.CreatePost(post)
 	if err != nil {
 		return err, nil
 	}
@@ -78,7 +78,7 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 	feeds[0] = &m.Feed{
 		Created:    time.Now(),
 		ConsumerID: owner,
-		PostID:     p.GetID(),
+		PostID:     post.GetID(),
 	}
 	for _, v := range follower {
 		peopleFollowOwner := v.GetFollower()
@@ -88,7 +88,7 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 		feed := &m.Feed{
 			Created:    time.Now(),
 			ConsumerID: v.GetFollower(),
-			PostID:     p.GetID(),
+			PostID:     post.GetID(),
 		}
 		feeds = append(feeds, feed)
 	}
@@ -96,5 +96,5 @@ func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (
 	if err2 != nil {
 		return err2, nil
 	}
-	return nil, p
+	return nil, post
 }

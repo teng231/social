@@ -163,13 +163,13 @@ func (c *Core) Register(user *m.User) (error, *m.User) {
 	user.SetPassword(generateHashPassword(user.GetPassword()))
 	user.Created = time.Now()
 	user.State = "pendding"
-	e, newUser := c.Db.CreateUser(user)
+	e := c.Db.CreateUser(user)
 
 	if e != nil {
 		utils.ErrLog(e)
 		return err, nil
 	}
-	_, tokenString := c.token.GenerateToken(newUser.GetID())
+	_, tokenString := c.token.GenerateToken(user.GetID())
 	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset*48) // a day
 	utils.Log(user.GetID())
 	utils.Log(tokenString)
@@ -183,7 +183,7 @@ func (c *Core) Register(user *m.User) (error, *m.User) {
 	link := fmt.Sprintf("http://%s/confirm/%s/%s", c.HOST, user.GetID(), tokenString)
 	emailContent := strings.Replace(string(data), "##link##", link, 1)
 	c.mailAd.SendMail(c.mailAd.Username, emailContent, "Confirm create Account", user.GetEmail())
-	return e, newUser
+	return e, user
 }
 
 func (c *Core) ActivedAccount(uid string) error {
@@ -194,15 +194,6 @@ func (c *Core) ActivedAccount(uid string) error {
 	}
 	return nil
 }
-
-// func (c *Core) CheckTokenExpired(tokenString string) string {
-// 	uid, err := c.rd.GetValue(tokenString)
-// 	if err != nil {
-// 		utils.ErrLog(err)
-// 		return ""
-// 	}
-// 	return uid
-// }
 
 func (c *Core) ChangePassword(username, oldPass, newPass string) error {
 	err, user := c.Db.GetUserByUname(username)
@@ -252,8 +243,4 @@ func (c *Core) CheckKeyToken(token, uidOwn string) error {
 		return err3
 	}
 	return nil
-}
-
-func getUserByCondition() {
-
 }

@@ -42,12 +42,12 @@ func (p *Core) UpsertAnAlbum(albumName, media, owner string) (error, *m.Album) {
 		Created:    time.Now(),
 		AlbumMedia: mediaArray,
 	}
-	err, album := p.Db.CreateAlbum(newAlbum)
+	err = p.Db.CreateAlbum(newAlbum)
 	if err != nil {
 		utils.ErrLog(err)
 		return err, nil
 	}
-	return nil, album
+	return nil, newAlbum
 }
 
 // func (p *Core) ModifiMedia(albumID string, medias []*m.Media) (error, *m.Album) {

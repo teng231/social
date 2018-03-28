@@ -22,14 +22,14 @@ func (db *DB) GetFeed(limit int, anchor, userId string) (error, []*m.Feed) {
 	return nil, feeds
 }
 
-func (db *DB) CreateFeed(f *m.Feed) (error, *m.Feed) {
+func (db *DB) CreateFeed(f *m.Feed) error {
 	collection := db.Db.C(feedCollection)
 	f.ID = bson.NewObjectId()
 	err := collection.Insert(&f)
 	if err != nil {
-		return err, nil
+		return err
 	}
-	return nil, f
+	return nil
 }
 
 func (db *DB) CreateFeeds(feeds []*m.Feed) (error, []interface{}) {

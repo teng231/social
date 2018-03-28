@@ -49,12 +49,12 @@ func (db *DB) GetPosts(pIDs []string) (error, []*m.Post) {
 	return nil, posts
 }
 
-func (db *DB) CreatePost(p *m.Post) (error, *m.Post) {
+func (db *DB) CreatePost(p *m.Post) error {
 	collection := db.Db.C(postCollection)
 	p.ID = bson.NewObjectId()
 	err := collection.Insert(&p)
 	if err != nil {
-		return err, nil
+		return err
 	}
-	return nil, p
+	return nil
 }

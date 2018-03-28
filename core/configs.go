@@ -32,13 +32,13 @@ type ICore interface {
 	IsUserLikePost(pid, uid string) (error, bool)
 	GetPosts(pIDs []string) (error, []*m.Post)
 	GetUserByIds(uIDs []string) (error, []*m.User)
-	CreatePost(p *m.Post) (error, *m.Post)
+	CreatePost(p *m.Post) error
 	CreateComment(c *m.Comment) (error, *m.Comment)
-	CreateFeed(f *m.Feed) (error, *m.Feed)
+	CreateFeed(f *m.Feed) error
 	CreateFeeds(feeds []*m.Feed) (error, []interface{})
-	CreateUser(u *m.User) (error, *m.User)
+	CreateUser(u *m.User) error
 	ModifyFollower(t *m.Follower) (error, *m.Follower)
-	CreateAlbum(a *m.Album) (error, *m.Album)
+	CreateAlbum(a *m.Album) error
 	HitLikePost(postID, userID string) error
 	UnlikePost(postID, userID string) error
 	//
@@ -50,6 +50,10 @@ type ICore interface {
 	// ReadById(cName, anyId string) (error, map[string]interface{})
 	// ReadByIdCondition(cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{})
 	UpdateUserPassword(uid, password string) error
+
+	RemoveSaved(sid string) error
+	ListSaved(limit int, anchor, uid string) (error, []*m.Saved)
+	CreateSaved(saved *m.Saved) error
 }
 
 func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mail.EmailMgr, privateKeyPath, PublicKeyPath string) {
@@ -65,4 +69,4 @@ func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mai
 	c.mailAd = mailAd
 }
 
-func (c *Core) CoreTest() {}
+// func (c *Core) CoreTest() {}

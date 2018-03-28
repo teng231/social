@@ -45,15 +45,15 @@ func (db *DB) GetUserByIds(uIDs []string) (error, []*m.User) {
 	return nil, users
 }
 
-func (db *DB) CreateUser(u *m.User) (error, *m.User) {
+func (db *DB) CreateUser(u *m.User) error {
 	collection := db.Db.C(userCollection)
 	u.ID = bson.NewObjectId()
 	u.AlbumName = fmt.Sprintf("@%s_%s", u.GetUserName(), u.GetID())
 	err := collection.Insert(&u)
 	if err != nil {
-		return err, nil
+		return err
 	}
-	return nil, u
+	return nil
 }
 
 // func (db *DB) GetUsersLikePost(userIDs []string) (error, []*m.User) {

@@ -7,6 +7,9 @@ func (g *GinConfig) ginStart() {
 	g.router.GET("signature-file", g.signatureFileToUpload)
 	g.router.POST("postDemo/:uid", g.postDemo)
 	// g.router.GET("/favicon.ico", g.sendFavicon)
+	// saved
+	saved := g.router.Group("/saved")
+	saved.POST("/:uid/create", g.SavePost)
 	// album
 	album := g.router.Group("/album")
 	album.GET("/:uid/byId/:abId", g.getAlbumById)
