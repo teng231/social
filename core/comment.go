@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadCommentByPostID(limit int, anchor, postId string) (error, []*m.Comment) {
+func (p *Social) LoadCommentByPostID(limit int, anchor, postId string) (error, []*m.Comment) {
 	err, comments := p.Db.GetComments(limit, anchor, postId)
 	if err != nil {
 		return err, nil
@@ -17,7 +17,7 @@ func (p *Core) LoadCommentByPostID(limit int, anchor, postId string) (error, []*
 }
 
 // InsertPost add post to db
-func (c *Core) UpsertCommentsToPost(pid, text, userID string) (error, *m.Comment) {
+func (c *Social) UpsertCommentsToPost(pid, text, userID string) (error, *m.Comment) {
 	if pid == "" || userID == "" {
 		utils.ErrLog(errors.New("err no field pid or userID"))
 		return errors.New("err no field pid or userID"), nil

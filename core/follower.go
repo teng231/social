@@ -3,12 +3,12 @@ package core
 import (
 	"time"
 
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
 //GetFollowerByOwner  ai đang follow bạn `owner`
-func (p *Core) LoadFollowerByOwner(owner string) (error, []*m.User) {
+func (p *Social) LoadFollowerByOwner(owner string) (error, []*m.User) {
 	err, follower := p.Db.GetFollower(owner)
 	listUserID := make([]string, 0)
 	for _, f := range follower {
@@ -31,7 +31,7 @@ func (p *Core) LoadFollowerByOwner(owner string) (error, []*m.User) {
 }
 
 // GetFollowingByUid bạn đang follow những ai `userId`
-func (p *Core) LoadFollowingByUid(uid string) (error, []*m.User) {
+func (p *Social) LoadFollowingByUid(uid string) (error, []*m.User) {
 	err, follower := p.Db.GetFollowing(uid)
 	listUserID := make([]string, 0)
 	for _, f := range follower {
@@ -53,7 +53,7 @@ func (p *Core) LoadFollowingByUid(uid string) (error, []*m.User) {
 	return nil, users
 }
 
-func (p *Core) UpsertFollowAnUser(uid, owner string) error {
+func (p *Social) UpsertFollowAnUser(uid, owner string) error {
 	follow := &m.Follower{
 		Follower: uid,
 		Own:      owner,
@@ -66,7 +66,7 @@ func (p *Core) UpsertFollowAnUser(uid, owner string) error {
 	return nil
 }
 
-func (p *Core) RemoveFollowAnUser(uid, owner string) error {
+func (p *Social) RemoveFollowAnUser(uid, owner string) error {
 	err := p.Db.UnfollowUser(owner, uid)
 	if err != nil {
 		return err

@@ -10,7 +10,7 @@ import (
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -106,7 +106,7 @@ func comparePassword(userPassword, hashFromDatabase string) bool {
 	return true
 }
 
-func (c *Core) Login(username, password string) (error, *m.User, string) {
+func (c *Social) Login(username, password string) (error, *m.User, string) {
 	err, user := c.Db.GetUserByUname(username)
 	if err != nil {
 		utils.ErrLog(err)
@@ -132,7 +132,7 @@ func (c *Core) Login(username, password string) (error, *m.User, string) {
 	return nil, user, tokenString
 }
 
-func (c *Core) Register(user *m.User) (error, *m.User) {
+func (c *Social) Register(user *m.User) (error, *m.User) {
 	username := user.GetUserName()
 
 	if username == "" || user.GetEmail() == "" || user.GetPassword() == "" {
@@ -186,7 +186,7 @@ func (c *Core) Register(user *m.User) (error, *m.User) {
 	return e, user
 }
 
-func (c *Core) ActivedAccount(uid string) error {
+func (c *Social) ActivedAccount(uid string) error {
 	err := c.Db.UpdateStateUser(uid, "activated")
 	if err != nil {
 		utils.ErrLog(err)
@@ -195,7 +195,7 @@ func (c *Core) ActivedAccount(uid string) error {
 	return nil
 }
 
-func (c *Core) ChangePassword(username, oldPass, newPass string) error {
+func (c *Social) ChangePassword(username, oldPass, newPass string) error {
 	err, user := c.Db.GetUserByUname(username)
 	if err != nil {
 		utils.ErrLog(err)
@@ -211,7 +211,7 @@ func (c *Core) ChangePassword(username, oldPass, newPass string) error {
 	return nil
 }
 
-func (c *Core) getUserByIDs(uIDs []string) (error, []*m.User) {
+func (c *Social) getUserByIDs(uIDs []string) (error, []*m.User) {
 	err, users := c.Db.GetUserByIds(uIDs)
 	if err != nil {
 		utils.ErrLog(err)
@@ -222,7 +222,7 @@ func (c *Core) getUserByIDs(uIDs []string) (error, []*m.User) {
 	}
 	return err, users
 }
-func (c *Core) CheckKeyToken(token, uidOwn string) error {
+func (c *Social) CheckKeyToken(token, uidOwn string) error {
 	uid, err := c.rd.GetValue(token)
 	if err != nil {
 		utils.ErrLog(err)

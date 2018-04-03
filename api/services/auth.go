@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/my0sot1s/social/mongo"
+	"github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
@@ -38,7 +38,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 		})
 		return
 	}
-	err, user := g.cr.Register(&mongo.User{
+	err, user := g.cr.Register(&mirror.User{
 		UserName: username,
 		Password: password,
 		Email:    email,

@@ -6,24 +6,24 @@ import (
 	"strconv"
 
 	"github.com/my0sot1s/social/core"
+	"github.com/my0sot1s/social/utils"
 
 	"github.com/gin-gonic/gin"
 )
 
 const (
 	DEFAULT_LIMIT = 20
-	DEFAULT_PAGE  = 1
 )
 
 type GinConfig struct {
 	router *gin.Engine
 	PORT   string
 	mode   string
-	cr     *core.Core
+	cr     *core.Social
 }
 
 // Config is a constructer
-func (g *GinConfig) Config(port, mode string, cr *core.Core) {
+func (g *GinConfig) Config(port, mode string, cr *core.Social) {
 	if mode == "" {
 		mode = gin.TestMode
 	}
@@ -63,7 +63,7 @@ func (g *GinConfig) signatureFileToUpload(ctx *gin.Context) {
 
 func (g *GinConfig) getLimitPage(strLimit, anchor string) (int, string) {
 	limit, err1 := strconv.Atoi(strLimit)
-
+	utils.ErrLog(err1)
 	if err1 != nil {
 		limit = DEFAULT_LIMIT
 	}

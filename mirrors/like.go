@@ -1,4 +1,4 @@
-package mongo
+package mirror
 
 import (
 	"encoding/json"

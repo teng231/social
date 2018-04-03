@@ -1,11 +1,11 @@
 package core
 
 import (
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Feed) {
+func (p *Social) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Feed) {
 	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
 		return err, nil
@@ -13,11 +13,11 @@ func (p *Core) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Fee
 	return nil, feeds
 }
 
-func (p *Core) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, []*m.User) {
+func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, []*m.User, string) {
 	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
-		return err, nil, nil
+		return err, nil, nil, ""
 	}
 	pIDs := make([]string, 0)
 
@@ -39,5 +39,9 @@ func (p *Core) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*
 	if err2 != nil {
 		utils.ErrLog(err2)
 	}
-	return nil, posts, users
+	newAnchor := ""
+	if len(posts) > 0 {
+		newAnchor = posts[len(posts)-1].GetID()
+	}
+	return nil, posts, users, newAnchor
 }

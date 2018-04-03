@@ -13,8 +13,10 @@ const (
 	DefaultLimit = 20
 )
 
-func Log(log interface{}) {
-	fmt.Printf("%v", log)
+func Log(logs ...interface{}) {
+	for _, log := range logs {
+		fmt.Printf("%v", log)
+	}
 	fmt.Println()
 }
 

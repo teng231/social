@@ -10,7 +10,7 @@ const (
 	secretKey = "97CGQGl4iIQ35AOWYpu_3u2S564"
 )
 
-func (c *Core) SignFileToUpload() string {
+func (c *Social) SignFileToUpload() string {
 	t := time.Now()
 	hashString := fmt.Sprintf("timestamp=%d%s", t.Unix(), secretKey)
 	hash := sha1.New()

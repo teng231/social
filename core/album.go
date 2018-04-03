@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.Album) {
+func (p *Social) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.Album) {
 	err, albums := p.Db.GetAlbumByAuthor(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -17,7 +17,7 @@ func (p *Core) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.
 	return nil, albums
 }
 
-func (p *Core) LoadAlbumById(ID string) (error, *m.Album) {
+func (p *Social) LoadAlbumById(ID string) (error, *m.Album) {
 	err, album := p.Db.GetAlbum(ID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -26,7 +26,7 @@ func (p *Core) LoadAlbumById(ID string) (error, *m.Album) {
 	return nil, album
 }
 
-func (p *Core) UpsertAnAlbum(albumName, media, owner string) (error, *m.Album) {
+func (p *Social) UpsertAnAlbum(albumName, media, owner string) (error, *m.Album) {
 	if albumName == "" {
 		albumName = fmt.Sprintf("created-%d", time.Now().Second())
 	}
@@ -50,7 +50,7 @@ func (p *Core) UpsertAnAlbum(albumName, media, owner string) (error, *m.Album) {
 	return nil, newAlbum
 }
 
-// func (p *Core) ModifiMedia(albumID string, medias []*m.Media) (error, *m.Album) {
+// func (p *Social) ModifiMedia(albumID string, medias []*m.Media) (error, *m.Album) {
 // 	err, album := p.Db.CreateAlbum(a)
 // 	if err != nil {
 // 		return err, nil

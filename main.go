@@ -86,7 +86,7 @@ func main() {
 	// close when fn main down
 	defer beforeDestroy(mg, rdCli)
 	// create Core
-	mainCore := &core.Core{}
+	mainCore := &core.Social{}
 	mainCore.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
 	// create RESTful
 	port := os.Getenv("PORT")

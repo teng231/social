@@ -1,4 +1,4 @@
-package mongo
+package mirror
 
 // Media define
 type Media struct {

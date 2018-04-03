@@ -3,19 +3,19 @@ package core
 import (
 	dbase "github.com/my0sot1s/social/db"
 	"github.com/my0sot1s/social/mail"
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/redis"
 )
 
-type Core struct {
+type Social struct {
 	HOST   string
-	Db     ICore
+	Db     ISocial
 	token  *JWTAuthentication
 	rd     *redis.RedisCli
 	mailAd *mail.EmailMgr
 }
 
-type ICore interface {
+type ISocial interface {
 	GetAlbumByAuthor(limit int, anchor, userId string) (error, []*m.Album)
 
 	GetUserByUname(username string) (error, *m.User)
@@ -56,7 +56,7 @@ type ICore interface {
 	CreateSaved(saved *m.Saved) error
 }
 
-func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mail.EmailMgr, privateKeyPath, PublicKeyPath string) {
+func (c *Social) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mail.EmailMgr, privateKeyPath, PublicKeyPath string) {
 	c.HOST = host
 	// connect to drive Mongo
 	c.Db = db
@@ -69,4 +69,4 @@ func (c *Core) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mai
 	c.mailAd = mailAd
 }
 
-// func (c *Core) CoreTest() {}
+// func (c *Social) CoreTest() {}

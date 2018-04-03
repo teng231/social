@@ -3,7 +3,7 @@ package db
 import (
 	"time"
 
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 
 	"gopkg.in/mgo.v2/bson"
 )

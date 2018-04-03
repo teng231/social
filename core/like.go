@@ -1,11 +1,11 @@
 package core
 
 import (
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadCountLike(postId string) (error, int) {
+func (p *Social) LoadCountLike(postId string) (error, int) {
 	err, count := p.Db.CountLike(postId)
 	if err != nil {
 		utils.ErrLog(err)
@@ -14,7 +14,7 @@ func (p *Core) LoadCountLike(postId string) (error, int) {
 	return nil, count
 }
 
-func (p *Core) UpsertLikePost(postId, uID string) error {
+func (p *Social) UpsertLikePost(postId, uID string) error {
 	err := p.Db.HitLikePost(postId, uID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -23,7 +23,7 @@ func (p *Core) UpsertLikePost(postId, uID string) error {
 	return nil
 }
 
-func (p *Core) RemoveLikePost(postId, uID string) error {
+func (p *Social) RemoveLikePost(postId, uID string) error {
 	err := p.Db.UnlikePost(postId, uID)
 	if err != nil {
 		utils.ErrLog(err)
@@ -32,7 +32,7 @@ func (p *Core) RemoveLikePost(postId, uID string) error {
 	return nil
 }
 
-func (p *Core) LoadUserLikePost(postId string) (error, []*m.User) {
+func (p *Social) LoadUserLikePost(postId string) (error, []*m.User) {
 	// get like
 	err1, liked := p.Db.GetLikes(postId)
 	if err1 != nil {
@@ -54,7 +54,7 @@ func (p *Core) LoadUserLikePost(postId string) (error, []*m.User) {
 	return nil, users
 }
 
-func (p *Core) CheckOwnerLikePost(postId, uid string) (error, bool) {
+func (p *Social) CheckOwnerLikePost(postId, uid string) (error, bool) {
 	// get like
 	err, b := p.Db.IsUserLikePost(postId, uid)
 	if err != nil && b {

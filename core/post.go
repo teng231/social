@@ -4,22 +4,26 @@ import (
 	"errors"
 	"time"
 
-	m "github.com/my0sot1s/social/mongo"
+	m "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Core) LoadPostByUser(limit int, anchor, user string) (error, []*m.Post) {
+func (p *Social) LoadPostByUser(limit int, anchor, user string) (error, []*m.Post, string) {
 	err, posts := p.Db.GetPost(limit, anchor, user)
 	for _, value := range posts {
 		utils.Log(value.ID)
 	}
 	if err != nil {
-		return err, nil
+		return err, nil, ""
 	}
-	return nil, posts
+	newAnchor := ""
+	if len(posts) > 0 {
+		newAnchor = posts[len(posts)-1].GetID()
+	}
+	return nil, posts, newAnchor
 }
 
-func (p *Core) LoadPostID(pid string) (error, *m.Post) {
+func (p *Social) LoadPostID(pid string) (error, *m.Post) {
 	err, post := p.Db.GetPostById(pid)
 	if err != nil {
 		return err, nil
@@ -27,16 +31,20 @@ func (p *Core) LoadPostID(pid string) (error, *m.Post) {
 	return nil, post
 }
 
-func (p *Core) LoadPostUser(limit int, anchor, userID string) (error, []*m.Post) {
+func (p *Social) LoadPostUser(limit int, anchor, userID string) (error, []*m.Post, string) {
 	err, posts := p.Db.GetPost(limit, anchor, userID)
 	if err != nil {
-		return err, nil
+		return err, nil, ""
 	}
-	return nil, posts
+	newAnchor := ""
+	if len(posts) > 0 {
+		newAnchor = posts[len(posts)-1].GetID()
+	}
+	return nil, posts, newAnchor
 }
 
 // AddNewPost `uid` owner of post
-func (c *Core) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (error, *m.Post) {
+func (c *Social) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string) (error, *m.Post) {
 	// create post
 	var medias []*m.Media
 	errMedia := utils.Str2T(mediasStr, &medias)

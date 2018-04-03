@@ -59,6 +59,7 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 		if limit < 0 {
 			//  lt
 			query = bson.M{"_id": bson.M{"$lt": bson.ObjectIdHex(anchor)}}
+			utils.Log("run less than")
 		} else {
 			//  gt
 			query = bson.M{"_id": bson.M{"$gt": bson.ObjectIdHex(anchor)}}
@@ -76,6 +77,7 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 	q := collection.Find(query)
 	if limit < 0 {
 		err = q.Limit(-limit).Sort("-$natural").All(&result)
+		utils.Log("run with limit < 0")
 	} else {
 		err = q.Limit(limit).All(&result)
 	}
