@@ -55,7 +55,7 @@ func beforeDestroy(mg *db.DB, rc *redis.RedisCli) {
 func main() {
 	c := loadConfig()
 	if os.Getenv("ENV_MODE") == "production" {
-		c.HOST = "serene-headland-81432.herokuapp.com"
+		c.HOST = "lit-eyrie-97480.herokuapp.com"
 	}
 	wg := sync.WaitGroup{}
 	wg.Add(3)
@@ -73,6 +73,7 @@ func main() {
 		}
 		wg.Done()
 	}()
+
 	mailCtrl := &mail.EmailMgr{}
 	go func() {
 		mailPort, e := strconv.Atoi(c.EmailPort)
@@ -88,6 +89,20 @@ func main() {
 	// create Core
 	mainCore := &core.Social{}
 	mainCore.Config(c.HOST, mg, rdCli, mailCtrl, "keys/id_rsa", "keys/id_rsa.pub")
+
+	// var medias = make([]*m.Media, 0)
+	// md := &m.Media{
+	// 	Width:    40078,
+	// 	PublicID: "122332323",
+	// }
+	// medias = append(medias, md)
+	// mainCore.CreateEmotion(medias, "@@@abc", 2000)
+	// var abc []string{"@@@abc"}
+	// me := mainCore.GetEmotionsByMultipleKeys("@@@abc")
+	// for _, v := range me {
+	// 	utils.Log(v)
+	// }
+
 	// create RESTful
 	port := os.Getenv("PORT")
 	if port == "" {

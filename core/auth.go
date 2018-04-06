@@ -132,6 +132,13 @@ func (c *Social) Login(username, password string) (error, *m.User, string) {
 	return nil, user, tokenString
 }
 
+func (c *Social) Logout(token string) error {
+	var keyList = []string{token}
+	_, err := c.rd.DelKey(keyList)
+	utils.ErrLog(err)
+	return err
+}
+
 func (c *Social) Register(user *m.User) (error, *m.User) {
 	username := user.GetUserName()
 
