@@ -4,6 +4,7 @@ import (
 	"time"
 
 	m "github.com/my0sot1s/social/mirrors"
+	"github.com/my0sot1s/social/utils"
 
 	"gopkg.in/mgo.v2/bson"
 )
@@ -19,6 +20,7 @@ func (db *DB) GetFeed(limit int, anchor, userId string) (error, []*m.Feed) {
 		f.ToFeed(v)
 		feeds = append(feeds, f)
 	}
+	utils.Log(feeds)
 	return nil, feeds
 }
 

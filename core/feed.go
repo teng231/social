@@ -40,8 +40,8 @@ func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, [
 		utils.ErrLog(err2)
 	}
 	newAnchor := ""
-	if len(posts) > 0 {
-		newAnchor = posts[len(posts)-1].GetID()
+	if len(feeds) > 0 {
+		newAnchor = feeds[len(feeds)-1].GetID()
 	}
 	return nil, posts, users, newAnchor
 }
