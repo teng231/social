@@ -7,6 +7,10 @@ func (g *GinConfig) ginStart() {
 	g.router.GET("signature-file", g.signatureFileToUpload)
 	g.router.POST("postDemo/:uid", g.postDemo)
 	// g.router.GET("/favicon.ico", g.sendFavicon)
+	// emotion
+	emotion := g.router.Group("/emotion")
+	emotion.GET("/:uid", g.getAllEmotions)
+	emotion.POST("/:uid/create", g.createNewEmotion)
 	// saved
 	saved := g.router.Group("/saved")
 	saved.POST("/:uid/create", g.SavePost)

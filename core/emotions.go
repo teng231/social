@@ -58,3 +58,13 @@ func (c *Social) GetEmotionsByMultipleKeys(key ...string) map[string][]*m.Emotio
 	}
 	return lMult
 }
+
+func (c *Social) GetEmotionByUId(uid string) map[string][]*m.Emotion {
+	err, users := c.LoadFollowingByUid(uid)
+	utils.ErrLog(err)
+	lUids := make([]string, 0)
+	for _, v := range users {
+		lUids = append(lUids, v.GetID())
+	}
+	return c.GetEmotionsByMultipleKeys(lUids...)
+}

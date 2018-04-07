@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/my0sot1s/social/utils"
 )
 
 func (g *GinConfig) createNewEmotion(ctx *gin.Context) {
@@ -26,7 +27,13 @@ func (g *GinConfig) createNewEmotion(ctx *gin.Context) {
 		})
 		return
 	}
-	m := g.cr.CreateEmotion(medias, by)
+	err, m := g.cr.CreateEmotion(medias, by)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": utils.ErrStr(err),
+		})
+		return
+	}
 	ctx.JSON(200, gin.H{
 		"emotion": m,
 	})
@@ -34,4 +41,8 @@ func (g *GinConfig) createNewEmotion(ctx *gin.Context) {
 
 func (g *GinConfig) getAllEmotions(ctx *gin.Context) {
 	uid := ctx.Param("uid")
+	kq := g.cr.GetEmotionByUId(uid)
+	ctx.JSON(200, gin.H{
+		"emotions": kq,
+	})
 }
