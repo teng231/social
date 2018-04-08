@@ -32,6 +32,7 @@ type ISocial interface {
 	IsUserLikePost(pid, uid string) (error, bool)
 	GetPosts(pIDs []string) (error, []*m.Post)
 	GetUserByIds(uIDs []string) (error, []*m.User)
+	GetUserById(id string) (error, *m.User)
 	CreatePost(p *m.Post) error
 	CreateComment(c *m.Comment) (error, *m.Comment)
 	CreateFeed(f *m.Feed) error

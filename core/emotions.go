@@ -54,7 +54,10 @@ func (c *Social) GetEmotions(key string) []*m.Emotion {
 func (c *Social) GetEmotionsByMultipleKeys(key ...string) map[string][]*m.Emotion {
 	lMult := make(map[string][]*m.Emotion)
 	for _, v := range key {
-		lMult[v] = c.GetEmotions(v)
+		emoArray := c.GetEmotions(v)
+		if len(emoArray) > 0 {
+			lMult[v] = emoArray
+		}
 	}
 	return lMult
 }

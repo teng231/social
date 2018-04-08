@@ -16,6 +16,15 @@ func (db *DB) GetUserByUname(username string) (error, *m.User) {
 	user.ToUser(mu)
 	return nil, user
 }
+func (db *DB) GetUserById(id string) (error, *m.User) {
+	user := &m.User{}
+	err, mu := db.ReadById(userCollection, id)
+	if err != nil {
+		return err, nil
+	}
+	user.ToUser(mu)
+	return nil, user
+}
 
 func (db *DB) GetUserByEmail(email string) (error, *m.User) {
 	user := &m.User{}

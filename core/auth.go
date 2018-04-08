@@ -251,3 +251,25 @@ func (c *Social) CheckKeyToken(token, uidOwn string) error {
 	}
 	return nil
 }
+
+func (c *Social) GetUserInfo(uid string) (error, *m.User) {
+	err, u := c.Db.GetUserById(uid)
+	if err != nil {
+		utils.ErrLog(err)
+		return err, nil
+	}
+	u.SetPassword("")
+	return nil, u
+}
+
+func (c *Social) GetMultipleUserInfo(uid []string) (error, []*m.User) {
+	err, users := c.Db.GetUserByIds(uid)
+	if err != nil {
+		utils.ErrLog(err)
+		return err, nil
+	}
+	for _, v := range users {
+		v.SetPassword("")
+	}
+	return nil, users
+}

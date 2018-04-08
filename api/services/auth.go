@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/my0sot1s/social/mirrors"
+	mirror "github.com/my0sot1s/social/mirrors"
 	"github.com/my0sot1s/social/utils"
 )
 
@@ -31,6 +31,7 @@ func (g *GinConfig) Login(ctx *gin.Context) {
 func (g *GinConfig) Register(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
+	avatar := ctx.PostForm("avatar")
 	email := ctx.PostForm("email")
 	if username == "" || password == "" || email == "" {
 		ctx.JSON(400, gin.H{
@@ -42,6 +43,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 		UserName: username,
 		Password: password,
 		Email:    email,
+		Avatar:   avatar,
 	})
 	if err != nil {
 		ctx.JSON(400, gin.H{

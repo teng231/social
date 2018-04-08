@@ -5,9 +5,9 @@ import (
 )
 
 type Emotion struct {
-	Medias  []*Media
-	Created int
-	By      string
+	Medias  []*Media `json:"media"`
+	Created int      `json:"created"`
+	By      string   `json:"by"`
 }
 
 func (e *Emotion) GetMedia() []*Media {
