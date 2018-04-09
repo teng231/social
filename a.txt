@@ -1,1 +1,15 @@
-[{"public_id":"layo0da3yjfnp9uze7ai","width":960,"height":639,"format":"jpg","bytes":53693,"url":"http://res.cloudinary.com/telosma/image/upload/v1523201444/layo0da3yjfnp9uze7ai.jpg"},{"public_id":"vbsglvzcoxgjktro94gy","width":540,"height":960,"format":"jpg","bytes":75406,"url":"http://res.cloudinary.com/telosma/image/upload/v1523201444/vbsglvzcoxgjktro94gy.jpg"},{"public_id":"hhkpw5yf0j8wo9vtnoxx","width":960,"height":720,"format":"jpg","bytes":53313,"url":"http://res.cloudinary.com/telosma/image/upload/v1523201444/hhkpw5yf0j8wo9vtnoxx.jpg"},{"public_id":"p26qkbfxtqb5kdyrbxju","width":206,"height":256,"format":"jpg","bytes":11141,"url":"http://res.cloudinary.com/telosma/image/upload/v1523201444/p26qkbfxtqb5kdyrbxju.jpg"}]
+ಠ‿ಠ Gomail ad running ಠ‿ಠ
+ಠ‿ಠ Redis connected ಠ‿ಠ
+ಠ‿ಠ mongodb connected ಠ‿ಠ
+  ಠ‿ಠ JWTAuthentication ready ಠ‿ಠ
+[5aca35d5d552310e46047a4e 5aca3521d552310e46047a4a 5aca34a6d552310e46047a46 5abd0f549ba7b20004956767 5ab685d50816300004fb2015 5ab684190816300004fb2011 5ab6831e0816300004fb200f 5a1552eba0e32304b0e057e7]
+&{ObjectIdHex("5ab684190816300004fb2011") 5a106166cb8eae85d819a78e Thư lại xem sao 2018-03-25 00:00:09.796 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021ab00 0xc42021abc0] [test iphone5]}
+&{ObjectIdHex("5ab685d50816300004fb2015") 5a106166cb8eae85d819a78e Chơi cờ là nghệ thuật
+ 2018-03-25 00:07:33.128 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021ac00 0xc42021ac40 0xc42021ac80] [test iphone5]}
+&{ObjectIdHex("5abd0f549ba7b20004956767") 5a106166cb8eae85d819a78e 1sadsda11111 2018-03-29 23:07:48.692 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021acc0] [test iphone5]}
+&{ObjectIdHex("5aca35d5d552310e46047a4e") 5aca30fdd552310e46047a45 Hot girl Linh Mai  2018-04-08 22:31:33.368 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021ad00 0xc42021ad40 0xc42021ad80 0xc42021adc0] [beauty test]}
+&{ObjectIdHex("5a1552eba0e32304b0e057e7") 5a1060c1cb8eae85d819a78c Đừng yêu anh  2017-11-22 17:35:23.733 +0700 +07 2017-11-22 17:35:23.733 +0700 +07 [0xc42021ae00 0xc42021ae40] [align]}
+&{ObjectIdHex("5ab6831e0816300004fb200f") 5a106166cb8eae85d819a78e Nhớ khong em 2018-03-24 23:55:58.413 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021aec0] [test iphone5]}
+&{ObjectIdHex("5aca34a6d552310e46047a46") 5aca3086d552310e46047a44 T là trâm Anh  2018-04-08 22:26:30.474 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021af00] [beauty test]}
+&{ObjectIdHex("5aca3521d552310e46047a4a") 5aca3086d552310e46047a44 Trâm Anh cô gái xinh xắn  2018-04-08 22:28:33.682 +0700 +07 0001-01-01 00:00:00 +0000 UTC [0xc42021af40 0xc42021af80 0xc42021afc0 0xc42021b000] [beauty test]}
+[GIN] 2018/04/09 - 21:15:40 | 200 [0m|  774.333216ms |       127.0.0.1 |  GET [0m    /feed/5a106166cb8eae85d819a78e/feedPost/5a106166cb8eae85d819a78e

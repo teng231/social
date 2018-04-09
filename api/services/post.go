@@ -102,7 +102,7 @@ func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 		return
 	}
 	// get post
-	err, posts, users, anchor := g.cr.LoadPostsByFeedUser(limit, anchor, userTarget)
+	err, posts, anchor := g.cr.LoadPostsByFeedUser(limit, anchor, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),
@@ -111,7 +111,6 @@ func (g *GinConfig) getFeedPostByUid(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{
 		"posts":  posts,
-		"users":  users,
 		"anchor": anchor,
 	})
 }

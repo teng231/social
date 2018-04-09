@@ -79,7 +79,7 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 		err = q.Limit(-limit).Sort("-$natural").All(&result)
 		utils.Log("run with limit < 0")
 	} else {
-		err = q.Limit(limit).All(&result)
+		err = q.Limit(limit).Sort("-$natural").All(&result)
 	}
 
 	if err != nil {

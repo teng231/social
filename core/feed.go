@@ -13,35 +13,26 @@ func (p *Social) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.F
 	return nil, feeds
 }
 
-func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, []*m.User, string) {
+func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, string) {
 	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
-		return err, nil, nil, ""
+		return err, nil, ""
 	}
 	pIDs := make([]string, 0)
 
 	for _, val := range feeds {
 		pIDs = append(pIDs, val.GetPostID())
 	}
-	uIDs := make([]string, 0)
 	var err2 error
-	var posts []*m.Post
-	var users []*m.User
-	err2, posts = p.Db.GetPosts(pIDs)
-	if err2 != nil {
-		utils.ErrLog(err2)
-	}
-	for _, v := range posts {
-		uIDs = append(uIDs, v.GetUserID())
-	}
-	err2, users = p.getUserByIDs(uIDs)
-	if err2 != nil {
+	posts := make([]*m.Post, 0)
+
+	if err2, posts = p.Db.GetPosts(pIDs); err2 != nil {
 		utils.ErrLog(err2)
 	}
 	newAnchor := ""
 	if len(feeds) > 0 {
 		newAnchor = feeds[len(feeds)-1].GetID()
 	}
-	return nil, posts, users, newAnchor
+	return nil, posts, newAnchor
 }

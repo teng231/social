@@ -42,7 +42,12 @@ func (db *DB) GetPosts(pIDs []string) (error, []*m.Post) {
 		bsonID := bson.M{"_id": bson.ObjectIdHex(p)}
 		listQueriesID = append(listQueriesID, bsonID)
 	}
-	err := collection.Find(bson.M{"$or": listQueriesID}).All(&posts)
+	utils.Log(pIDs)
+	err := collection.Find(bson.M{"$or": listQueriesID}).Sort("-created").All(&posts)
+	for _, p := range posts {
+		utils.Log(p)
+	}
+
 	if err != nil {
 		return err, nil
 	}
