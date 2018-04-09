@@ -63,5 +63,5 @@ func (g *GinConfig) ginStart() {
 	// })
 	user := g.router.Group("/user")
 	user.GET("/:uid", g.ReadSingleUserInfo)
-	user.POST("/:uid", g.ReadMultipleUserInfo)
+	user.POST("/multiples", g.ReadMultipleUserInfo)
 }
