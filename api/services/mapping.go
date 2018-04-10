@@ -14,6 +14,7 @@ func (g *GinConfig) ginStart() {
 	// saved
 	saved := g.router.Group("/saved")
 	saved.POST("/:uid/create", g.SavePost)
+	saved.GET("/:uid", g.getSaved)
 	// album
 	album := g.router.Group("/album")
 	album.GET("/:uid/byId/:abId", g.getAlbumById)

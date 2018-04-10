@@ -42,7 +42,6 @@ type ISocial interface {
 	CreateAlbum(a *m.Album) error
 	HitLikePost(postID, userID string) error
 	UnlikePost(postID, userID string) error
-	//
 	// GetUsersLikePost(userIDs []string) (error, []*m.User)
 	FollowUser(f *m.Follower) error
 	UnfollowUser(own, uid string) error

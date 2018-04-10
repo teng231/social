@@ -24,7 +24,7 @@ func (db *DB) RemoveSaved(sid string) error {
 }
 func (db *DB) ListSaved(limit int, anchor, uid string) (error, []*m.Saved) {
 	saveds := make([]*m.Saved, 0)
-	err, ms := db.ReadByIdCondition(saveCollection, anchor, limit, bson.M{"user_id": uid})
+	err, ms := db.ReadByIdCondition(saveCollection, anchor, limit, bson.M{"saver": uid})
 	if err != nil {
 		return err, nil
 	}
