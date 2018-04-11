@@ -1,6 +1,7 @@
 package db
 
 import (
+	"math"
 	"time"
 
 	"github.com/my0sot1s/social/utils"
@@ -75,14 +76,9 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 	var err error
 
 	q := collection.Find(query)
-	if limit < 0 {
-		err = q.Limit(-limit).Sort("-$natural").All(&result)
-		utils.Log("run with limit < 0")
-	} else {
-		err = q.Limit(limit).Sort("-$natural").All(&result)
-	}
+	limit = int(math.Abs(float64(limit)))
 
-	if err != nil {
+	if err = q.Limit(limit).Sort("-$natural").All(&result); err != nil {
 		return err, nil
 	}
 	return nil, result
