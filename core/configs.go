@@ -31,6 +31,7 @@ type ISocial interface {
 	GetLikes(postID string) (error, []*m.Like)
 	IsUserLikePost(pid, uid string) (error, bool)
 	GetPosts(pIDs []string) (error, []*m.Post)
+	GetExplore(limit int, anchor string, listIgnore []string) (error, []*m.Post)
 	GetUserByIds(uIDs []string) (error, []*m.User)
 	GetUserById(id string) (error, *m.User)
 	CreatePost(p *m.Post) error

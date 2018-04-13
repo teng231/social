@@ -20,6 +20,21 @@ func (db *DB) GetPost(limit int, anchor, userId string) (error, []*m.Post) {
 	return nil, posts
 }
 
+func (db *DB) GetExplore(limit int, anchor string, listIgnore []string) (error, []*m.Post) {
+	posts := make([]*m.Post, 0)
+	conditions := bson.M{"user_id": bson.M{"$nin": listIgnore}}
+	err, ma := db.ReadByIdCondition(postCollection, anchor, limit, conditions)
+	if err != nil {
+		return err, nil
+	}
+	for _, v := range ma {
+		a := &m.Post{}
+		a.ToPost(v)
+		posts = append(posts, a)
+	}
+	return nil, posts
+}
+
 func (db *DB) GetPostById(postID string) (error, *m.Post) {
 	var post = &m.Post{}
 	err, i := db.ReadById(postCollection, postID)

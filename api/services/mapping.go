@@ -65,4 +65,7 @@ func (g *GinConfig) ginStart() {
 	user := g.router.Group("/user")
 	user.GET("/:uid", g.ReadSingleUserInfo)
 	user.POST("/multiples", g.ReadMultipleUserInfo)
+
+	explore := g.router.Group("/explore")
+	explore.GET("/:uid", g.getExplore)
 }

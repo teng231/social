@@ -92,3 +92,22 @@ func (c *Social) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string)
 	}
 	return nil, post
 }
+
+func (p *Social) GetAnyPost(limit int, anchor, owner string) (error, []*m.Post, string) {
+	// get all follower
+	var err error
+	err, listFollowing := p.Db.GetFollowing(owner)
+	listUid := make([]string, 0)
+	for _, v := range listFollowing {
+		listUid = append(listUid, v.GetOwn())
+	}
+	err, posts := p.Db.GetExplore(limit, anchor, listUid)
+	if err != nil {
+		return err, nil, ""
+	}
+	newAnchor := ""
+	if len(posts) > 0 {
+		newAnchor = posts[len(posts)-1].GetID()
+	}
+	return nil, posts, newAnchor
+}

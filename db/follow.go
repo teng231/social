@@ -4,7 +4,7 @@ import (
 	m "github.com/my0sot1s/social/mirrors"
 	"gopkg.in/mgo.v2/bson"
 )
-
+// GetFollower return những ng đang follow own
 func (db *DB) GetFollower(own string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)
 	var follower []*m.Follower
@@ -14,7 +14,7 @@ func (db *DB) GetFollower(own string) (error, []*m.Follower) {
 	}
 	return nil, follower
 }
-
+// GetFollowing return những ng ban đang follow
 func (db *DB) GetFollowing(follower string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)
 	var following []*m.Follower

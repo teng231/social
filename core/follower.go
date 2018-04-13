@@ -7,7 +7,7 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-//GetFollowerByOwner  ai đang follow bạn `owner`
+// LoadFollowerByOwner ai đang follow bạn `owner`
 func (p *Social) LoadFollowerByOwner(owner string) (error, []*m.User) {
 	err, follower := p.Db.GetFollower(owner)
 	listUserID := make([]string, 0)
