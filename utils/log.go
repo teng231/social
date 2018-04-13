@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -39,4 +40,14 @@ func ReadFileRoot(path string) ([]byte, error) {
 		ErrLog(err)
 	}
 	return data, err
+}
+
+func Jsonify(j interface{}) string {
+	bytes, err := json.Marshal(j)
+	ErrLog(err)
+	return string(bytes[:])
+}
+
+func LogJson(j interface{}) {
+	fmt.Println(Jsonify(j))
 }

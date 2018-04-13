@@ -52,7 +52,7 @@ func (g *GinConfig) getUserPost(ctx *gin.Context) {
 	limit, anchor := g.getLimitPage(ctx.Query("limit"), ctx.Query("anchor"))
 	if uid == "" {
 		ctx.JSON(400, gin.H{
-			"error": "no post id",
+			"error": "no uid",
 		})
 		return
 	}

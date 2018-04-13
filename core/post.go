@@ -8,21 +8,6 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Social) LoadPostByUser(limit int, anchor, user string) (error, []*m.Post, string) {
-	err, posts := p.Db.GetPost(limit, anchor, user)
-	for _, value := range posts {
-		utils.Log(value.ID)
-	}
-	if err != nil {
-		return err, nil, ""
-	}
-	newAnchor := ""
-	if len(posts) > 0 {
-		newAnchor = posts[len(posts)-1].GetID()
-	}
-	return nil, posts, newAnchor
-}
-
 func (p *Social) LoadPostID(pid string) (error, *m.Post) {
 	err, post := p.Db.GetPostById(pid)
 	if err != nil {
@@ -40,6 +25,7 @@ func (p *Social) LoadPostUser(limit int, anchor, userID string) (error, []*m.Pos
 	if len(posts) > 0 {
 		newAnchor = posts[len(posts)-1].GetID()
 	}
+	utils.LogJson(posts)
 	return nil, posts, newAnchor
 }
 
