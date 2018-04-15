@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	DEFAULT_LIMIT = 20
+	DEFAULT_LIMIT = -10
 )
 
 type GinConfig struct {

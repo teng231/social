@@ -19,15 +19,18 @@ func (c *Social) CreateUserSave(uid, pid string) (error, *m.Saved) {
 	return nil, saved
 }
 
-func (c *Social) ListUserSaved(limit int, anchor, uid string) (error, string, []*m.Saved) {
+func (c *Social) ListUserSaved(limit int, anchor, uid string) (error, []*m.Saved, string) {
 	err, listSaved := c.Db.ListSaved(limit, anchor, uid)
 	if err != nil {
-		return err, "", nil
+		return err, nil, ""
 	}
-	newanchor := ""
+	newAnchor := ""
 	if len(listSaved) > 0 {
-		newanchor = listSaved[len(listSaved)-1].GetID()
+		if limit > 0 {
+			newAnchor = listSaved[0].GetID()
+		} else {
+			newAnchor = listSaved[len(listSaved)-1].GetID()
+		}
 	}
-
-	return nil, newanchor, listSaved
+	return nil, listSaved, newAnchor
 }

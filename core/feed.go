@@ -5,12 +5,20 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Social) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Feed) {
+func (p *Social) LoadFeedByUser(limit int, anchor, userID string) (error, []*m.Feed, string) {
 	err, feeds := p.Db.GetFeed(limit, anchor, userID)
 	if err != nil {
-		return err, nil
+		return err, nil, ""
 	}
-	return nil, feeds
+	var newAnchor string
+	if len(feeds) > 0 {
+		if limit > 0 {
+			newAnchor = feeds[0].GetID()
+		} else {
+			newAnchor = feeds[len(feeds)-1].GetID()
+		}
+	}
+	return nil, feeds, newAnchor
 }
 
 func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, []*m.Post, string) {
@@ -32,7 +40,11 @@ func (p *Social) LoadPostsByFeedUser(limit int, anchor, userID string) (error, [
 	}
 	newAnchor := ""
 	if len(feeds) > 0 {
-		newAnchor = feeds[len(feeds)-1].GetID()
+		if limit > 0 {
+			newAnchor = feeds[0].GetID()
+		} else {
+			newAnchor = feeds[len(feeds)-1].GetID()
+		}
 	}
 	return nil, posts, newAnchor
 }

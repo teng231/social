@@ -14,7 +14,7 @@ func (g *GinConfig) getUserFeed(ctx *gin.Context) {
 		})
 		return
 	}
-	err, feeds := g.cr.LoadFeedByUser(limit, anchor, userTarget)
+	err, feeds, newAnchor := g.cr.LoadFeedByUser(limit, anchor, userTarget)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),
@@ -22,5 +22,7 @@ func (g *GinConfig) getUserFeed(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(200, gin.H{
-		"feeds": feeds})
+		"feeds":  feeds,
+		"anchor": newAnchor,
+	})
 }

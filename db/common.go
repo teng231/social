@@ -77,7 +77,6 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 
 	q := collection.Find(query)
 	limit = int(math.Abs(float64(limit)))
-
 	if err = q.Limit(limit).Sort("-created").All(&result); err != nil {
 		return err, nil
 	}

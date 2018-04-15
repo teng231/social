@@ -23,9 +23,12 @@ func (p *Social) LoadPostUser(limit int, anchor, userID string) (error, []*m.Pos
 	}
 	newAnchor := ""
 	if len(posts) > 0 {
-		newAnchor = posts[len(posts)-1].GetID()
+		if limit > 0 {
+			newAnchor = posts[0].GetID()
+		} else {
+			newAnchor = posts[len(posts)-1].GetID()
+		}
 	}
-	utils.LogJson(posts)
 	return nil, posts, newAnchor
 }
 
@@ -107,7 +110,11 @@ func (p *Social) GetAnyPost(limit int, anchor, owner string) (error, []*m.Post, 
 	}
 	newAnchor := ""
 	if len(posts) > 0 {
-		newAnchor = posts[len(posts)-1].GetID()
+		if limit > 0 {
+			newAnchor = posts[0].GetID()
+		} else {
+			newAnchor = posts[len(posts)-1].GetID()
+		}
 	}
 	return nil, posts, newAnchor
 }

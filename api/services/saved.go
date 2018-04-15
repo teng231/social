@@ -38,7 +38,7 @@ func (g *GinConfig) getSaved(ctx *gin.Context) {
 		return
 	}
 
-	err, anchor, saved := g.cr.ListUserSaved(limit, anchor, uid)
+	err, saved, anchor := g.cr.ListUserSaved(limit, anchor, uid)
 
 	if err != nil {
 		ctx.JSON(400, gin.H{
