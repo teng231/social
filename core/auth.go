@@ -24,7 +24,7 @@ type JWTAuthentication struct {
 
 const (
 	defaultTokenDuration = 72
-	defaultExpireOffset  = 30 * 60 * 60 // 30 min
+	defaultExpireOffset  = 1 * 60 * 60 // 30 min
 )
 
 func (jwta *JWTAuthentication) Config(privateKeyPath, PublicKeyPath string) {
@@ -127,7 +127,8 @@ func (c *Social) Login(username, password string) (error, *m.User, string) {
 	_, tokenString := c.token.GenerateToken(user.GetID())
 	user.SetPassword("")
 	// insert to redis
-	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset)
+	aliveTime := time.Duration(defaultExpireOffset) * time.Second // 1h
+	err = c.rd.SetValue(tokenString, user.GetID(), aliveTime)
 	utils.ErrLog(err)
 	return nil, user, tokenString
 }
@@ -177,7 +178,8 @@ func (c *Social) Register(user *m.User) (error, *m.User) {
 		return err, nil
 	}
 	_, tokenString := c.token.GenerateToken(user.GetID())
-	err = c.rd.SetValue(tokenString, user.GetID(), defaultExpireOffset*48) // a day
+	timeExpried := time.Duration(defaultExpireOffset*48) * time.Second
+	err = c.rd.SetValue(tokenString, user.GetID(), timeExpried) // 2 day
 	utils.Log(user.GetID())
 	utils.Log(tokenString)
 	// send email

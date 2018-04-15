@@ -18,15 +18,42 @@
   <img src="http://banhtv.com/uploads/2016/10/800/big-hero-6-movie-poster-201610432.jpg" alt="">
   <img src="http://static.phimmoi.net/post/2014/11/25/big-hero-6-7.jpg" alt=""> -->
   <div id="app">
-    {{message}}
+    <h1>title</h1>
+    {{dem}}
+    <p v-for="v in map">{{v}}</p>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
-    var app = new Vue({
+    new Vue({
       el: '#app',
       data: {
-        message: 'Hello Vue!'
-      }
+        dem: 0,
+        map: [1, 2]
+      },
+      computed: {
+
+      },
+      watch: {
+
+      },
+      methods: {
+
+      },
+      created() {
+        random()
+
+        setInterval(() => {
+          // this.map.push(this.map[this.map.length - 1] + 1)
+          tinhtoan()
+        }, 200)
+      },
+      mounted() {
+        this.message = 'abc'
+        console.log('mounted')
+      },
+      // components: {
+      //   nan
+      // }
     })
   </script>
 </body>

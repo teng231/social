@@ -36,7 +36,7 @@ func (rc *RedisCli) Close() error {
 }
 
 func (rc *RedisCli) SetValue(key string, value string, expiration time.Duration) error {
-	return rc.client.Set(key, value, expiration*time.Second).Err()
+	return rc.client.Set(key, value, expiration).Err()
 }
 
 func (rc *RedisCli) GetValue(key string) (string, error) {
