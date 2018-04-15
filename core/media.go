@@ -17,8 +17,8 @@ func (c *Social) SignFileToUpload() (string, int64) {
 	loc, err := time.LoadLocation("America/New_York")
 	utils.ErrLog(err)
 	t := time.Now().In(loc)
-	timeStamp := t.Unix() * 1000
-	hashString := fmt.Sprintf("timestamp=%d%s", t.Unix()*1000, secretKey)
+	timeStamp := t.Unix()
+	hashString := fmt.Sprintf("timestamp=%d%s", t.Unix(), secretKey)
 	hash := sha1.New()
 	hash.Write([]byte(hashString))
 	hashCode := hash.Sum(nil)
