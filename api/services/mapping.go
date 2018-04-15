@@ -1,11 +1,19 @@
 package api
 
+import "github.com/gin-gonic/gin"
+
 func (g *GinConfig) ginStart() {
 	// ping pong
 	g.router.GET("ping", g.ping)
-	g.router.GET("", g.ginStarted)
+	// g.router.GET("", g.ginStarted)
 	g.router.GET("signature-file", g.signatureFileToUpload)
 	g.router.POST("postDemo/:uid", g.postDemo)
+	g.router.LoadHTMLGlob("api/upload/*")
+	g.router.LoadHTMLFiles("api/upload/index.html")
+	g.router.GET("upload", func(ctx *gin.Context) {
+		ctx.Header("Content-Type", "text/html")
+		ctx.HTML(200, "index.html", gin.H{})
+	})
 	// g.router.GET("/favicon.ico", g.sendFavicon)
 	// emotion
 	emotion := g.router.Group("/emotion")
@@ -68,4 +76,5 @@ func (g *GinConfig) ginStart() {
 
 	explore := g.router.Group("/explore")
 	explore.GET("/:uid", g.getExplore)
+
 }

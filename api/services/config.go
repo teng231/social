@@ -35,7 +35,8 @@ func (g *GinConfig) Config(port, mode string, cr *core.Social) {
 	g.PORT = port
 	g.cr = cr
 	g.router.Use(g.middlewareHeader())
-	g.router.StaticFile("/favicon.ico", "./../favicon.ico")
+	// g.router.Static("api/upload", "./../favicon.ico")
+	// g.router.StaticFile("/", "/Users/Te.Nguyen/GO_WORK_SPACE/src/github.com/my0sot1s/social/api/upload/index.html")
 }
 
 // Run start api
@@ -55,9 +56,10 @@ func (g *GinConfig) ginStarted(ctx *gin.Context) {
 }
 
 func (g *GinConfig) signatureFileToUpload(ctx *gin.Context) {
-	signature := g.cr.SignFileToUpload()
+	signature, timeStamp := g.cr.SignFileToUpload()
 	ctx.JSON(200, gin.H{
 		"signature": signature,
+		"timestamp": timeStamp,
 	})
 }
 
@@ -80,7 +82,7 @@ func (g *GinConfig) sendFavicon(ctx *gin.Context) {
 func (g *GinConfig) middlewareHeader() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		c.Writer.Header().Set("Content-Type", "application/json")
+		c.Writer.Header().Set("Content-Type", "application/json;text/html")
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
 		if c.Request.Method == "OPTIONS" {
