@@ -28,3 +28,12 @@ func (db *DB) CreateComment(c *m.Comment) (error, *m.Comment) {
 	}
 	return nil, c
 }
+
+func (db *DB) CountCommentByPostId(postID string) (error, int) {
+	collection := db.Db.C(commentCollection)
+	count, err := collection.Find(bson.M{"post_id": postID}).Count()
+	if err != nil {
+		return err, 0
+	}
+	return nil, count
+}

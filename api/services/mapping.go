@@ -58,6 +58,7 @@ func (g *GinConfig) ginStart() {
 	//comment
 	comment := g.router.Group("/comment")
 	comment.GET("/:uid/post/:pid", g.getCommentPost)
+	comment.GET("/:uid/count/:pid", g.countCommentByPost)
 	comment.POST("/:uid/post/:pid", g.addCommentToPost)
 
 	// auth

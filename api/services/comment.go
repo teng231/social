@@ -47,3 +47,21 @@ func (g *GinConfig) getCommentPost(ctx *gin.Context) {
 		"comment": comments,
 	})
 }
+
+func (g *GinConfig) countCommentByPost(ctx *gin.Context) {
+	pid := ctx.Param("pid")
+	if pid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no post id",
+		})
+		return
+	}
+	err, count := g.cr.LoadCountCommentByPost(pid)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": utils.ErrStr(err),
+		})
+		return
+	}
+	ctx.JSON(200, count)
+}

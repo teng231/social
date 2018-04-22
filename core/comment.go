@@ -36,3 +36,12 @@ func (c *Social) UpsertCommentsToPost(pid, text, userID string) (error, *m.Comme
 
 	return err, upCmt
 }
+
+func (p *Social) LoadCountCommentByPost(postId string) (error, int) {
+	err, count := p.Db.CountCommentByPostId(postId)
+	if err != nil {
+		utils.ErrLog(err)
+		return err, 0
+	}
+	return nil, count
+}

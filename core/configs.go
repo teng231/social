@@ -36,6 +36,7 @@ type ISocial interface {
 	GetUserById(id string) (error, *m.User)
 	CreatePost(p *m.Post) error
 	CreateComment(c *m.Comment) (error, *m.Comment)
+	CountCommentByPostId(postID string) (error, int)
 	CreateFeed(f *m.Feed) error
 	CreateFeeds(feeds []*m.Feed) (error, []interface{})
 	CreateUser(u *m.User) error
