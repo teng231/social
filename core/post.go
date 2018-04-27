@@ -101,6 +101,7 @@ func (p *Social) GetAnyPost(limit int, anchor, owner string) (error, []*m.Post, 
 	var err error
 	err, listFollowing := p.Db.GetFollowing(owner)
 	listUid := make([]string, 0)
+	listUid = append(listUid, owner)
 	for _, v := range listFollowing {
 		listUid = append(listUid, v.GetOwn())
 	}
