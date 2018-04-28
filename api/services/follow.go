@@ -5,6 +5,24 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
+func (g *GinConfig) getCountFollow(ctx *gin.Context) {
+	userTarget := ctx.Param("userTarget")
+	if userTarget == "" {
+		ctx.JSON(400, gin.H{
+			"error": "no userTarget",
+		})
+		return
+	}
+	err, num := g.cr.CountFollowerByOwner(userTarget)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": utils.ErrStr(err),
+		})
+		return
+	}
+	ctx.JSON(200, num)
+}
+
 func (g *GinConfig) getListFollowing(ctx *gin.Context) {
 	userTarget := ctx.Param("userTarget")
 	if userTarget == "" {

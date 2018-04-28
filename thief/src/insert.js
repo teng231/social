@@ -35,5 +35,6 @@ function uploadWithHttpUrl(url, folder = 'commons', tags) {
   })
 }
 
+uploadWithHttpUrl('https://images.unsplash.com/photo-1518889778-5111daad1bda?ixlib=rb-0.3.5&q=85&fm=jpg&crop=entropy&cs=srgb&ixid=eyJhcHBfaWQiOjEyMDd9&s=6ecf48c54c0916adaddba10b0336617f','test',[])
 
 module.exports = uploadWithHttpUrl

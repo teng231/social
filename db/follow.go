@@ -4,6 +4,16 @@ import (
 	m "github.com/my0sot1s/social/mirrors"
 	"gopkg.in/mgo.v2/bson"
 )
+
+func (db *DB) CountFollower(own string) (error, int) {
+	collection := db.Db.C(followerCollection)
+	count, err := collection.Find(bson.M{"own": own}).Count()
+	if err != nil {
+		return err, -1
+	}
+	return nil, count
+}
+
 // GetFollower return những ng đang follow own
 func (db *DB) GetFollower(own string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)
@@ -14,6 +24,7 @@ func (db *DB) GetFollower(own string) (error, []*m.Follower) {
 	}
 	return nil, follower
 }
+
 // GetFollowing return những ng ban đang follow
 func (db *DB) GetFollowing(follower string) (error, []*m.Follower) {
 	collection := db.Db.C(followerCollection)

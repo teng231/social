@@ -7,6 +7,14 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
+func (p *Social) CountFollowerByOwner(owner string) (error, int) {
+	err, count := p.Db.CountFollower(owner)
+	if utils.ErrLog(err); err != nil {
+		return nil, -1
+	}
+	return nil, count
+}
+
 // LoadFollowerByOwner ai đang follow bạn `owner`
 func (p *Social) LoadFollowerByOwner(owner string) (error, []*m.User) {
 	err, follower := p.Db.GetFollower(owner)
