@@ -34,7 +34,7 @@ func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
 		})
 		return
 	}
-	err, albums := g.cr.LoadAlbumByAuthor(limit, anchor, authorId)
+	err, albums, newAnchor := g.cr.LoadAlbumByAuthor(limit, anchor, authorId)
 	if err != nil {
 		ctx.JSON(400, gin.H{
 			"error": utils.ErrStr(err),
@@ -43,6 +43,7 @@ func (g *GinConfig) getAlbumByAuthor(ctx *gin.Context) {
 	}
 	ctx.JSON(200, gin.H{
 		"albums": albums,
+		"anchor": newAnchor,
 	})
 }
 

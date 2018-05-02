@@ -13,6 +13,7 @@ type User struct {
 	Password  string        `json:"password,omitempty" bson:"password"`
 	AlbumName string        `json:"albumname" bson:"albumname"`
 	UserName  string        `json:"username" bson:"username"`
+	Fullname  string        `json:"fullname" bson:"fullname"`
 	Email     string        `json:"email" bson:"email"`
 	Created   time.Time     `json:"created" bson:"created"`
 	Avatar    string        `json:"avatar,omitempty" bson:"avatar,omitempty"`
@@ -85,6 +86,14 @@ func (p *User) GetBanner() string {
 	}
 	return p.Banner
 }
+
+func (p *User) GetFullname() string {
+	if p.Fullname == "" {
+		return ""
+	}
+	return p.Fullname
+}
+
 
 func (p *User) GetState() string {
 	if p.State == "" {

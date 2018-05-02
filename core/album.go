@@ -8,13 +8,21 @@ import (
 	"github.com/my0sot1s/social/utils"
 )
 
-func (p *Social) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.Album) {
+func (p *Social) LoadAlbumByAuthor(limit int, anchor, userID string) (error, []*m.Album, string) {
 	err, albums := p.Db.GetAlbumByAuthor(limit, anchor, userID)
 	if err != nil {
 		utils.ErrLog(err)
-		return err, nil
+		return err, nil, ""
 	}
-	return nil, albums
+	var newAnchor string
+	if len(albums) > 0 {
+		if limit > 0 {
+			newAnchor = albums[0].GetID()
+		} else {
+			newAnchor = albums[len(albums)-1].GetID()
+		}
+	}
+	return nil, albums, newAnchor
 }
 
 func (p *Social) LoadAlbumById(ID string) (error, *m.Album) {

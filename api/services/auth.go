@@ -32,6 +32,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
 	avatar := ctx.PostForm("avatar")
+	fullname := ctx.PostForm("fullname")
 	email := ctx.PostForm("email")
 	if username == "" || password == "" || email == "" {
 		ctx.JSON(400, gin.H{
@@ -44,6 +45,7 @@ func (g *GinConfig) Register(ctx *gin.Context) {
 		Password: password,
 		Email:    email,
 		Avatar:   avatar,
+		Fullname: fullname,
 	})
 	if err != nil {
 		ctx.JSON(400, gin.H{
