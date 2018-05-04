@@ -81,3 +81,14 @@ func (p *Social) RemoveFollowAnUser(uid, owner string) error {
 	}
 	return nil
 }
+
+func (p *Social) CheckFollow(owner, uid string) bool {
+	numb, err := p.Db.IsFollow(owner, uid)
+	if numb > 0 {
+		return true
+	}
+	if err != nil {
+		utils.ErrLog(err)
+	}
+	return false
+}

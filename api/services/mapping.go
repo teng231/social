@@ -34,6 +34,8 @@ func (g *GinConfig) ginStart() {
 	follow.GET("/:uid/following/:userTarget", g.getListFollowing)
 	follow.GET("/:uid/count/:userTarget", g.getCountFollow)
 	follow.POST("/:uid/unfollow", g.unFollowAnUser)
+	follow.POST("/:uid/follow", g.followAnUser)
+	follow.GET("/:uid/is/:userTarget", g.checkFollowOtherUser)
 
 	// like
 	like := g.router.Group("/like")

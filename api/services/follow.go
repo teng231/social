@@ -118,3 +118,12 @@ func (g *GinConfig) unFollowAnUser(ctx *gin.Context) {
 		"ok": true,
 	})
 }
+
+func (g *GinConfig) checkFollowOtherUser(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	owner := ctx.Param("userTarget")
+	b := g.cr.CheckFollow(owner, uid)
+	ctx.JSON(200, gin.H{
+		"isFollow": b,
+	})
+}

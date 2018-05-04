@@ -63,3 +63,13 @@ func (db *DB) UnfollowUser(own, uid string) error {
 	}
 	return nil
 }
+
+func (db *DB) IsFollow(own, uid string) (int, error) {
+	collection := db.Db.C(followerCollection)
+	num, err := collection.Find(bson.M{"own": own, "follower": uid}).Count()
+	if err != nil {
+		return 0, err
+	}
+
+	return num, nil
+}
