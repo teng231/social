@@ -40,6 +40,7 @@ type ISocial interface {
 	CountCommentByPostId(postID string) (error, int)
 	CreateFeed(f *m.Feed) error
 	CreateFeeds(feeds []*m.Feed) (error, []interface{})
+	DeleteFeed(uid, owner string) error
 	CreateUser(u *m.User) error
 	UpsertFeed(id string, f *m.Feed) error
 

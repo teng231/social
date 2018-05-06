@@ -61,6 +61,25 @@ func (p *Social) LoadFollowingByUid(uid string) (error, []*m.User) {
 	return nil, users
 }
 
+func (p *Social) CombineFollowToFeed(uid, owner string) {
+	// find post
+	_, ps := p.Db.GetPost(-100, "", owner)
+	// make array
+	listFeed := make([]*m.Feed, 0)
+	for _, v := range ps {
+		listFeed = append(listFeed, &m.Feed{
+			Created:    time.Now(),
+			PostID:     v.GetID(),
+			ConsumerID: uid,
+			Author:     owner,
+		})
+	}
+	err, _ := p.Db.CreateFeeds(listFeed)
+	if err != nil {
+		utils.ErrLog(err)
+	}
+}
+
 func (p *Social) UpsertFollowAnUser(uid, owner string) error {
 	follow := &m.Follower{
 		Follower: uid,
@@ -71,16 +90,25 @@ func (p *Social) UpsertFollowAnUser(uid, owner string) error {
 	if err != nil {
 		return err
 	}
+	// add to feed
+	go p.CombineFollowToFeed(uid, owner)
 	return nil
+}
+
+func (p *Social) ReduceFeeds(uid, owner string) {
+	err := p.Db.DeleteFeed(uid, owner)
+	if err != nil {
+		utils.ErrLog(err)
+	}
 }
 
 func (p *Social) RemoveFollowAnUser(uid, owner string) error {
 	err := p.Db.UnfollowUser(owner, uid)
 	// remove all feed
-	
 	if err != nil {
 		return err
 	}
+	go p.ReduceFeeds(uid, owner)
 	return nil
 }
 
