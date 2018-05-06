@@ -76,6 +76,8 @@ func (p *Social) UpsertFollowAnUser(uid, owner string) error {
 
 func (p *Social) RemoveFollowAnUser(uid, owner string) error {
 	err := p.Db.UnfollowUser(owner, uid)
+	// remove all feed
+	
 	if err != nil {
 		return err
 	}

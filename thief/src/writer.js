@@ -10,9 +10,10 @@ var Medias = new mongoose.Schema({
   public_id: String,
   url: String,
   width: Number,
-  width: Number,
+  height: Number,
+  bytes: Number,
   description: String,
   tags: [String]
 })
 // tao model smarjob tương ứng với schema đã khai báo bên trên
-module.exports = mongoose.model('Medias', Medias, 'flower')
+module.exports = mongoose.model('Medias', Medias, 'girl')

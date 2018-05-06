@@ -12,29 +12,44 @@ func (g *GinConfig) createNewPost(ctx *gin.Context) {
 	tags := ctx.PostForm("tags")
 	medias := ctx.PostForm("medias")
 	if uid == "" {
+		utils.Log("no uid")
 		ctx.JSON(400, gin.H{
 			"error": "no uid",
 		})
 		return
 	}
 	if userID == "" {
+		utils.Log("no userID")
+
 		ctx.JSON(400, gin.H{
 			"error": "no userID",
 		})
 		return
 	}
 	if content == "" {
+		utils.Log("no no content")
 		ctx.JSON(400, gin.H{
 			"error": "no content ",
 		})
 		return
 	}
 	if medias == "" {
+		utils.Log("no no medias")
+
 		ctx.JSON(400, gin.H{
-			"error": "medias",
+			"error": "no medias",
 		})
 		return
 	}
+	if tags == "" {
+		utils.Log("no no tags")
+
+		ctx.JSON(400, gin.H{
+			"error": "no tags",
+		})
+		return
+	}
+
 	err, post := g.cr.AddNewPostBonusFeed(userID, content, medias, tags)
 	if err != nil {
 		ctx.JSON(400, gin.H{

@@ -2,12 +2,13 @@ var request = require('request')
 let db = require('./src/writer')
 let Promise = require('bluebird')
 const queryString = require('query-string');
+//  node main.js 14c284aa084b6b83f53158acfdcc628faa3087518937d2ce34dc7afba19a505d 1
 let qs = (o) => {
   return queryString.stringify(o)
 }
 
 let params = {
-  query: 'flower',
+  query: 'pretty girl',
   per_page: 30
 }
 
@@ -21,7 +22,7 @@ var options = (page, token) => ({
 function convertObject(list) {
   return list.map(l => {
     return {
-      public_id: `natural${l.id}`,
+      public_id: `girl${l.id}`,
       url: l.urls.full,
       width: l.width,
       height: l.height,

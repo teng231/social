@@ -8,6 +8,20 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+func (db *DB) GetMigrateFeed(limit int) (error, []*m.Feed) {
+	feeds := make([]*m.Feed, 0)
+	err, mf := db.ReadByIdCondition(feedCollection, "", limit, bson.M{})
+	if err != nil {
+		return err, nil
+	}
+	for _, v := range mf {
+		f := &m.Feed{}
+		f.ToFeed(v)
+		feeds = append(feeds, f)
+	}
+	return nil, feeds
+}
+
 func (db *DB) GetFeed(limit int, anchor, userId string) (error, []*m.Feed) {
 	feeds := make([]*m.Feed, 0)
 	err, mf := db.ReadByIdCondition(feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
@@ -47,3 +61,15 @@ func (db *DB) CreateFeeds(feeds []*m.Feed) (error, []interface{}) {
 	}
 	return nil, feedDone
 }
+
+func (db *DB) UpsertFeed(id string, f *m.Feed) error {
+	collection := db.Db.C(feedCollection)
+	collection.RemoveId(bson.ObjectIdHex(id))
+	err := collection.Insert(*f)
+	return err
+}
+
+// func (db *DB) DeleteFeed(id string) error {
+// 	collection := db.Db.C(feedCollection)
+// 	collection.Remove({bson.M{})
+// }

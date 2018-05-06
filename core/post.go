@@ -75,6 +75,7 @@ func (c *Social) AddNewPostBonusFeed(userID, content, mediasStr, tagsStr string)
 	feeds[0] = &m.Feed{
 		Created:    time.Now(),
 		ConsumerID: owner,
+		Author:     userID,
 		PostID:     post.GetID(),
 	}
 	for _, v := range follower {

@@ -23,6 +23,7 @@ type ISocial interface {
 	GetPost(limit int, anchor, userId string) (error, []*m.Post)
 	GetPostById(postID string) (error, *m.Post)
 	GetFeed(limit int, anchor, userId string) (error, []*m.Feed)
+	GetMigrateFeed(limit int) (error, []*m.Feed)
 	GetFollower(own string) (error, []*m.Follower)
 	GetFollowing(follower string) (error, []*m.Follower)
 	CountLike(postID string) (error, int)
@@ -40,6 +41,8 @@ type ISocial interface {
 	CreateFeed(f *m.Feed) error
 	CreateFeeds(feeds []*m.Feed) (error, []interface{})
 	CreateUser(u *m.User) error
+	UpsertFeed(id string, f *m.Feed) error
+
 	ModifyFollower(t *m.Follower) (error, *m.Follower)
 	CreateAlbum(a *m.Album) error
 	HitLikePost(postID, userID string) error

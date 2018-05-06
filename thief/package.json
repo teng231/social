@@ -10,9 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "cloudinary": "^1.11.0",
     "curl-request": "^1.1.1",
+    "faker": "^4.1.0",
+    "lodash": "^4.17.10",
     "mongoose": "^5.0.16",
     "query-string": "^6.0.0",
     "querystring": "^0.2.0",

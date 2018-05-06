@@ -12,6 +12,7 @@ type Feed struct {
 	ID         bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	ConsumerID string        `json:"comsumer_id" bson:"comsumer_id"`
 	PostID     string        `json:"post_id" bson:"post_id"`
+	Author     string        `json:"author" bson:"author"`
 	Created    time.Time     `json:"created" bson:"created"`
 }
 
@@ -41,6 +42,12 @@ func (p *Feed) GetPostID() string {
 		return ""
 	}
 	return p.PostID
+}
+func (p *Feed) GetAuthor() string {
+	if p.Author == "" {
+		return ""
+	}
+	return p.Author
 }
 
 func (p *Feed) GetCreated() time.Time {
