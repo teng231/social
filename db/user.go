@@ -104,3 +104,15 @@ func (db *DB) UpdateUserPassword(uid, password string) error {
 	}
 	return nil
 }
+
+func (db *DB) SearchUser(query string) (error, []*m.User) {
+	collection := db.Db.C(userCollection)
+	regexQuery := bson.M{"$regex": query}
+	allQuery := []bson.M{bson.M{"username": regexQuery}, bson.M{"email": regexQuery}, bson.M{"fullname": regexQuery}}
+	var users []*m.User
+	err := collection.Find(bson.M{"$or": allQuery}).Limit(20).All(&users)
+	if err != nil {
+		return err, nil
+	}
+	return nil, users
+}

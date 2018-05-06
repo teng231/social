@@ -42,3 +42,26 @@ func (g *GinConfig) ReadMultipleUserInfo(ctx *gin.Context) {
 		"users": u,
 	})
 }
+func (g *GinConfig) SearchForUser(ctx *gin.Context) {
+	uid := ctx.Param("uid")
+	query := ctx.Query("query")
+	if uid == "" {
+		ctx.JSON(400, gin.H{
+			"error": "uid not found",
+		})
+		return
+	}
+	if &query == nil {
+		query = `.*`
+	}
+	err, us := g.cr.LookupUserByQuery(query)
+	if err != nil {
+		ctx.JSON(400, gin.H{
+			"error": utils.ErrStr(err),
+		})
+		return
+	}
+	ctx.JSON(200, gin.H{
+		"users": us,
+	})
+}

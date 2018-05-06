@@ -62,6 +62,7 @@ type ISocial interface {
 	CreateSaved(saved *m.Saved) error
 	CountFollower(own string) (error, int)
 	IsFollow(own, uid string) (int, error)
+	SearchUser(query string) (error, []*m.User)
 }
 
 func (c *Social) Config(host string, db *dbase.DB, rd *redis.RedisCli, mailAd *mail.EmailMgr, privateKeyPath, PublicKeyPath string) {

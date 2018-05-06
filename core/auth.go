@@ -275,3 +275,11 @@ func (c *Social) GetMultipleUserInfo(uid []string) (error, []*m.User) {
 	}
 	return nil, users
 }
+
+func (c *Social) LookupUserByQuery(pattent string) (error, []*m.User) {
+	err, findUser := c.Db.SearchUser(pattent)
+	for _, v := range findUser {
+		v.SetPassword("")
+	}
+	return err, findUser
+}
