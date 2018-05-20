@@ -52,18 +52,21 @@ func (connect *DB) Close() {
 
 // request: `condition`, `anchor`
 
-func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{}) {
+func (db *DB) ReadByIdCondition(orderBy, cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{}) {
 	collection := db.Db.C(cName)
 	result := make([]map[string]interface{}, 0)
+	if orderBy == "" || &orderBy == nil {
+		orderBy = "_id"
+	}
 	var query map[string]interface{}
 	if anchor != "" {
 		if limit < 0 {
 			//  lt
-			query = bson.M{"_id": bson.M{"$lt": bson.ObjectIdHex(anchor)}}
+			query = bson.M{orderBy: bson.M{"$lt": bson.ObjectIdHex(anchor)}}
 			utils.Log("run less than")
 		} else {
 			//  gt
-			query = bson.M{"_id": bson.M{"$gt": bson.ObjectIdHex(anchor)}}
+			query = bson.M{orderBy: bson.M{"$gt": bson.ObjectIdHex(anchor)}}
 		}
 	} else {
 		query = bson.M{}

@@ -7,7 +7,7 @@ import (
 
 func (db *DB) GetComments(limit int, anchor, postID string) (error, []*m.Comment) {
 	comments := make([]*m.Comment, 0)
-	err, mc := db.ReadByIdCondition(commentCollection, anchor, limit, bson.M{"post_id": postID})
+	err, mc := db.ReadByIdCondition("_id", commentCollection, anchor, limit, bson.M{"post_id": postID})
 	if err != nil {
 		return err, nil
 	}

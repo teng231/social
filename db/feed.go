@@ -10,7 +10,7 @@ import (
 
 func (db *DB) GetMigrateFeed(limit int) (error, []*m.Feed) {
 	feeds := make([]*m.Feed, 0)
-	err, mf := db.ReadByIdCondition(feedCollection, "", limit, bson.M{})
+	err, mf := db.ReadByIdCondition("_id", feedCollection, "", limit, bson.M{})
 	if err != nil {
 		return err, nil
 	}
@@ -24,7 +24,7 @@ func (db *DB) GetMigrateFeed(limit int) (error, []*m.Feed) {
 
 func (db *DB) GetFeed(limit int, anchor, userId string) (error, []*m.Feed) {
 	feeds := make([]*m.Feed, 0)
-	err, mf := db.ReadByIdCondition(feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
+	err, mf := db.ReadByIdCondition("post_id", feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
 	if err != nil {
 		return err, nil
 	}
@@ -71,6 +71,6 @@ func (db *DB) UpsertFeed(id string, f *m.Feed) error {
 
 func (db *DB) DeleteFeed(uid, owner string) error {
 	collection := db.Db.C(feedCollection)
-	_, err := collection.RemoveAll(bson.M{"author": owner,"comsumer_id": uid})
+	_, err := collection.RemoveAll(bson.M{"author": owner, "comsumer_id": uid})
 	return err
 }
