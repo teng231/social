@@ -105,6 +105,7 @@ func (p *Social) ReduceFeeds(uid, owner string) {
 func (p *Social) RemoveFollowAnUser(uid, owner string) error {
 	err := p.Db.UnfollowUser(owner, uid)
 	// remove all feed
+	utils.Log(uid, ",", owner)
 	if err != nil {
 		return err
 	}

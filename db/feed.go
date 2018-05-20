@@ -71,6 +71,6 @@ func (db *DB) UpsertFeed(id string, f *m.Feed) error {
 
 func (db *DB) DeleteFeed(uid, owner string) error {
 	collection := db.Db.C(feedCollection)
-	err := collection.Remove(bson.M{"author": owner, "comsumer_id": uid})
+	_, err := collection.RemoveAll(bson.M{"author": owner,"comsumer_id": uid})
 	return err
 }

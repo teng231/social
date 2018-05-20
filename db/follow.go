@@ -57,7 +57,7 @@ func (db *DB) FollowUser(f *m.Follower) error {
 
 func (db *DB) UnfollowUser(own, uid string) error {
 	collection := db.Db.C(followerCollection)
-	err := collection.Remove(bson.M{"own": uid, "follower": own})
+	err := collection.Remove(bson.M{"own": own, "follower": uid})
 	if err != nil {
 		return err
 	}
