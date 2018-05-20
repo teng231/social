@@ -24,7 +24,8 @@ func (db *DB) GetMigrateFeed(limit int) (error, []*m.Feed) {
 
 func (db *DB) GetFeed(limit int, anchor, userId string) (error, []*m.Feed) {
 	feeds := make([]*m.Feed, 0)
-	err, mf := db.ReadByIdCondition(feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
+	// err, mf := db.ReadByIdCondition(feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
+	err, mf := db.ReadByIdOtherCondition("post_id", feedCollection, anchor, limit, bson.M{"comsumer_id": userId})
 	if err != nil {
 		return err, nil
 	}

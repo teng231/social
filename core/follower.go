@@ -68,7 +68,7 @@ func (p *Social) CombineFollowToFeed(uid, owner string) {
 	listFeed := make([]*m.Feed, 0)
 	for _, v := range ps {
 		listFeed = append(listFeed, &m.Feed{
-			Created:    v.GetCreated(),
+			Created:    time.Now(),
 			PostID:     v.GetID(),
 			ConsumerID: uid,
 			Author:     owner,

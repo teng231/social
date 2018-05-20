@@ -82,6 +82,36 @@ func (db *DB) ReadByIdCondition(cName, anchor string, limit int, conditions map[
 	}
 	return nil, result
 }
+func (db *DB) ReadByIdOtherCondition(fieldName, cName, anchor string, limit int, conditions map[string]interface{}) (error, []map[string]interface{}) {
+	collection := db.Db.C(cName)
+	result := make([]map[string]interface{}, 0)
+	var query map[string]interface{}
+	if anchor != "" {
+		if limit < 0 {
+			//  lt
+			query = bson.M{fieldName: bson.M{"$lt": anchor}}
+			utils.Log("run less than")
+		} else {
+			//  gt
+			query = bson.M{fieldName: bson.M{"$gt": anchor}}
+		}
+	} else {
+		query = bson.M{}
+	}
+	if conditions != nil {
+		for k, c := range conditions {
+			query[k] = c
+		}
+	}
+	var err error
+
+	q := collection.Find(query)
+	limit = int(math.Abs(float64(limit)))
+	if err = q.Limit(limit).Sort("-created").All(&result); err != nil {
+		return err, nil
+	}
+	return nil, result
+}
 
 func (db *DB) ReadOneBasic(cName string, conditionQuery interface{}) (error, map[string]interface{}) {
 	collection := db.Db.C(cName)
