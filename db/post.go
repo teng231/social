@@ -8,7 +8,7 @@ import (
 
 func (db *DB) GetPost(limit int, anchor, userId string) (error, []*m.Post) {
 	posts := make([]*m.Post, 0)
-	err, ma := db.ReadByIdCondition("_id", postCollection, anchor, limit, bson.M{"user_id": userId})
+	err, ma := db.ReadByIdCondition(postCollection, anchor, limit, bson.M{"user_id": userId})
 	if err != nil {
 		return err, nil
 	}
@@ -23,7 +23,7 @@ func (db *DB) GetPost(limit int, anchor, userId string) (error, []*m.Post) {
 func (db *DB) GetExplore(limit int, anchor string, listIgnore []string) (error, []*m.Post) {
 	posts := make([]*m.Post, 0)
 	conditions := bson.M{"user_id": bson.M{"$nin": listIgnore}}
-	err, ma := db.ReadByIdCondition("_id", postCollection, anchor, limit, conditions)
+	err, ma := db.ReadByIdCondition(postCollection, anchor, limit, conditions)
 	if err != nil {
 		return err, nil
 	}

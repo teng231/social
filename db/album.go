@@ -17,7 +17,7 @@ func (db *DB) GetAlbum(AlbumID string) (error, *m.Album) {
 
 func (db *DB) GetAlbumByAuthor(limit int, anchor, userId string) (error, []*m.Album) {
 	albums := make([]*m.Album, 0)
-	err, ma := db.ReadByIdCondition("_id", albumCollection, anchor, limit, bson.M{"author": userId})
+	err, ma := db.ReadByIdCondition(albumCollection, anchor, limit, bson.M{"author": userId})
 	if err != nil {
 		return err, nil
 	}
